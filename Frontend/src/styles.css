@@ -1,4 +1,11 @@
+:root {
+  --font-color-main: #f0f8ff;
+  --font-size-title: 64px;
+  --background-color-main: #343434;
+}
+
 body {
-  background-color: #343434;
-  color: aliceblue;
+  background-color: var(--background-color-main);
+  color: var(--font-color-main);
+  margin: 0;
 }
