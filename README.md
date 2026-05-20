@@ -34,7 +34,17 @@ albo:
 npx ng serve
 ```
 
-Następnie można przejść do: `http://localhost:4200`
+Następnie można przejść do: http://localhost:4200
+
+## Serwer
+
+Lokalny serwer backendowy stworzony w frameworku **FastAPI**. Serwer odpowiada za komunikację z zewnętrzną bazą danych oraz udostępnianie punktów końcowych dla aplikacji. Aby uruchomić serwer trzeba wejść w folder `Backend` i wpisać komende:
+
+```bash
+uvicorn main:app --reload
+```
+
+Serwer jest dostępny pod adresem: http://localhost:8000
 
 ## Dokumentacja
 Po więcej szczegółowych informacji dotyczącej aplikacji można przeczytać w [dokumentacji projektu](./docs/topic-selection.md).
