@@ -50,5 +50,12 @@ Przedstawia strukturę bazy danych aplikacji. System przechowuje informacje o fi
 
 ![ERD](./docs/ERD.png)
 
+## Diagram Przypadków Użycia
+
+Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych. Użytkownik niezalogowany może się rejestrować i przeglądać filmy, natomiast zalogowany korzysta z pełnych funkcji systemu, takich jak ocenianie, recenzowanie, polubienie filmu oraz przeglądanie proponowanych dla użytkownika filmów. Backend odpowiada za wykonywanie algorytmów oraz automatyczne aktualizowanie ocen filmów.
+
+![Diagram Przypadków Użycia](./docs/DPU.png)
+
+
 ## Dokumentacja
 Po więcej szczegółowych informacji dotyczącej aplikacji można przeczytać w [dokumentacji projektu](./docs/topic-selection.md).
