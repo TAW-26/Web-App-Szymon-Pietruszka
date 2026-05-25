@@ -193,6 +193,10 @@ INSERT INTO moviecheck.review (id_user, id_movie, text, created_at)
 VALUES 
     (1, 4, 'Hello there', '2026-05-20');
 
+INSERT INTO moviecheck.rating (id_user, id_movie, rating)
+VALUES 
+    (1, 4, 9);
+
 SELECT * FROM MovieCheck.user;
 
 SELECT * FROM MovieCheck.movie;

@@ -13,8 +13,10 @@ class User(Base):
     password = Column(String(255), nullable=False)
     birthdate =Column(Date)
     gender = Column(String(20))
+
     favorite = relationship("Movie", secondary=lambda: Favorite.__table__)
     review = relationship("Review")
+    ratings = relationship("Rating")
 
 class Movie(Base):
     __tablename__ = quoted_name("movie", True)
@@ -33,6 +35,7 @@ class Movie(Base):
     genres = relationship("Genre", secondary=lambda: MovieGenre.__table__)
     actors = relationship("Actors", secondary=lambda: MovieActors.__table__)
     reviews = relationship("Review")
+    ratings = relationship("Rating")
 
 class Actors(Base):
     __tablename__ = quoted_name("actors", True)
@@ -88,6 +91,10 @@ class Rating(Base):
     __table_args__ = {"schema": "moviecheck"}
 
     id_rating = Column(Integer, primary_key=True, index=True)
-    id_user = Column(Integer, ForeignKey(User.id_user), nullable=False)
-    id_movie = Column(Integer, ForeignKey(Movie.id_movie), nullable=False)
+
+    id_user = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('user', True)}.id_user", ondelete="CASCADE"), primary_key=True)
+    id_movie = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('movie', True)}.id_movie", ondelete="CASCADE"), primary_key=True)
+
     rating = Column(SmallInteger, CheckConstraint('rating >= 0 AND rating <= 10'), nullable=False)
+
+    movie_data = relationship("Movie")

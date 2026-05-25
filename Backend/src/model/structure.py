@@ -69,7 +69,6 @@ class FavoriteResponseSchema(BaseModel):
 
 class ReviewResponseSchema(BaseModel):
     id_user: int
-    id_movie: ShortDataMovieResponseSchema
     text: str
     created_at: date
     id_movie: ShortDataMovieResponseSchema = Field(validation_alias="movie_data")
@@ -81,6 +80,21 @@ class ReviewResponseSchema(BaseModel):
 class UserReviewsResponseSchema(BaseModel):
     id_user: int
     review: List[ReviewResponseSchema]
+
+    class Config:
+        from_attributes = True
+
+class RatingResponseSchema(BaseModel):
+    rating: int
+    id_movie: ShortDataMovieResponseSchema = Field(validation_alias="movie_data")
+
+    class Config:
+        from_attributes = True
+        populate_by_name = True
+
+class UserRatingResponseSchema(BaseModel):
+    id_user: int
+    ratings: List[RatingResponseSchema]
 
     class Config:
         from_attributes = True
