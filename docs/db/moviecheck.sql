@@ -185,6 +185,10 @@ SELECT 4, id_genre
 FROM moviecheck.genre 
 WHERE name IN ('Action', 'Adventure');
 
+INSERT INTO moviecheck.favorite (id_user, id_movie) 
+VALUES 
+    (1, 4);
+
 SELECT * FROM MovieCheck.user;
 
 SELECT * FROM MovieCheck.movie;
