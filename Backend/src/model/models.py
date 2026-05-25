@@ -29,7 +29,7 @@ class Movie(Base):
     rating = Column(Numeric(precision=3, scale=2), default=0.00)
     
     genres = relationship("Genre", secondary=lambda: MovieGenre.__table__)
-    actors = None
+    actors = relationship("Actors", secondary=lambda: MovieActors.__table__)
 
 class Actors(Base):
     __tablename__ = quoted_name("actors", True)
@@ -41,9 +41,9 @@ class Actors(Base):
 class MovieActors(Base):
     __tablename__ = quoted_name("movie_actors", True)
     __table_args__ = {"schema": "moviecheck"}
-
-    id_actor = Column(Integer, ForeignKey(Actors.id_actor, ondelete="CASCADE"), primary_key=True)
-    id_movie = Column(Integer, ForeignKey(Movie.id_movie, ondelete="CASCADE"), primary_key=True)
+    
+    id_movie = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('movie', True)}.id_movie", ondelete="CASCADE"), primary_key=True)
+    id_actor = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('actors', True)}.id_actor", ondelete="CASCADE"), primary_key=True)
 
 class Genre(Base):
     __tablename__ = quoted_name("genre", True)

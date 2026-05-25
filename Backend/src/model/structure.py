@@ -12,12 +12,12 @@ class MovieResponseSchema(BaseModel):
     year: int
     rating: float
     genres: List[str]
-    actors: List[str] | None
+    actors: List[str]
 
     class Config:
         from_attributes = True
-
-    @field_validator("genres", mode="before")
+        
+    @field_validator("genres", "actors", mode="before")
     @classmethod
     def serialize(cls, value):
         if isinstance(value, list):

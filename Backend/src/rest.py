@@ -30,7 +30,7 @@ def get_user_by_id(id: int, db: Session = Depends(get_db)):
 
 @router.get("/movies", response_model=List[structure.MovieResponseSchema])
 def get_movies(db: Session = Depends(get_db)):
-    movies = db.query(models.Movie).options(joinedload(models.Movie.genres)).all()
+    movies = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors)).all()
     return movies
 
 @router.get("/movie/{id}")
