@@ -174,6 +174,17 @@ INSERT INTO MovieCheck.movie_actors (id_movie, id_actor) VALUES
 	(5, 11),
 	(5, 12);
 
+INSERT INTO moviecheck.genre (name) 
+VALUES 
+    ('Adventure'),
+    ('Action'),
+    ('Fantasy');
+
+INSERT INTO moviecheck.movie_genre (id_movie, id_genre)
+SELECT 4, id_genre 
+FROM moviecheck.genre 
+WHERE name IN ('Action', 'Adventure');
+
 SELECT * FROM MovieCheck.user;
 
 SELECT * FROM MovieCheck.movie;
