@@ -16,3 +16,8 @@ def read_root():
 def get_users(db: Session = Depends(get_db)):
     users = db.query(models.User).all()
     return users
+
+@router.get("/movies")
+def get_users(db: Session = Depends(get_db)):
+    movies = db.query(models.Movie).all()
+    return movies
