@@ -15,6 +15,8 @@ models.Base.metadata.create_all(bind=engine)
 def read_root():
     return {"message": "Hello There"}
 
+# USER
+
 @router.get("/users")
 def get_users(db: Session = Depends(get_db)):
     users = db.query(models.User).all()
@@ -28,6 +30,9 @@ def get_user_by_id(id: int, db: Session = Depends(get_db)):
     
     return user
 
+
+# MOVIE
+
 @router.get("/movies", response_model=List[structure.MovieResponseSchema])
 def get_movies(db: Session = Depends(get_db)):
     movies = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors)).all()
@@ -39,4 +44,13 @@ def get_movie_by_id(id: int, db: Session = Depends(get_db)):
     if not movie:
             raise HTTPException(status_code=404, detail="Movie not found")
     
-    return movie
+
+# FAVORITES
+
+@router.get("/favorites/{id}/favorite", response_model=structure.FavoriteResponseSchema)
+def get_user_favortie(id: int, db: Session = Depends(get_db)):
+    favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == id).first()
+    if not favorites:
+            raise HTTPException(status_code=404, detail="Favortie movies not found")
+    
+    return favorites

@@ -13,6 +13,7 @@ class User(Base):
     password = Column(String(255), nullable=False)
     birthdate =Column(Date)
     gender = Column(String(20))
+    favorite = relationship("Movie", secondary=lambda: Favorite.__table__)
 
 class Movie(Base):
     __tablename__ = quoted_name("movie", True)
@@ -63,8 +64,8 @@ class Favorite(Base):
     __tablename__ = quoted_name("favorite", True)
     __table_args__ = {"schema": "moviecheck"}
 
-    id_user = Column(Integer, ForeignKey(User.id_user , ondelete="CASCADE"), primary_key=True)
-    id_movie = Column(Integer, ForeignKey(Movie.id_movie, ondelete="CASCADE"), primary_key=True)
+    id_user = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('user', True)}.id_user", ondelete="CASCADE"), primary_key=True)
+    id_movie = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('movie', True)}.id_movie", ondelete="CASCADE"), primary_key=True)
 
 class Review(Base):
     __tablename__ = quoted_name("review", True)

@@ -25,3 +25,10 @@ class MovieResponseSchema(BaseModel):
         
         return value
     
+class FavoriteResponseSchema(BaseModel):
+    id_user: int
+    favorite: List[MovieResponseSchema]
+
+    class Config:
+        from_attributes = True
+    
