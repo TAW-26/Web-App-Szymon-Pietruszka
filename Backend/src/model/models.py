@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, Numeric, SmallInteger, CheckConstraint, quoted_name
+from sqlalchemy.orm import relationship
 from src.database.connect import Base
 
 class User(Base):
@@ -26,6 +27,9 @@ class Movie(Base):
     production = Column(String(255), nullable=False)
     year = Column(SmallInteger, nullable=False)
     rating = Column(Numeric(precision=3, scale=2), default=0.00)
+    
+    genres = relationship("Genre", secondary=lambda: MovieGenre.__table__)
+    actors = None
 
 class Actors(Base):
     __tablename__ = quoted_name("actors", True)
@@ -52,8 +56,8 @@ class MovieGenre(Base):
     __tablename__ = quoted_name("movie_genre", True)
     __table_args__ = {"schema": "moviecheck"}
 
-    id_movie = Column(Integer, ForeignKey(Movie.id_movie, ondelete="CASCADE"), primary_key=True)
-    id_genre = Column(Integer, ForeignKey(Genre.id_genre, ondelete="CASCADE"), primary_key=True)
+    id_movie = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('movie', True)}.id_movie", ondelete="CASCADE"), primary_key=True)
+    id_genre = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('genre', True)}.id_genre", ondelete="CASCADE"), primary_key=True)
 
 class Favorite(Base):
     __tablename__ = quoted_name("favorite", True)
