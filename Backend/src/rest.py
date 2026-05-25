@@ -35,14 +35,16 @@ def get_user_by_id(id: int, db: Session = Depends(get_db)):
 
 @router.get("/movies", response_model=List[structure.MovieResponseSchema])
 def get_movies(db: Session = Depends(get_db)):
-    movies = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors)).all()
+    movies = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors), joinedload(models.Movie.reviews), joinedload(models.Movie.reviews).joinedload(models.Review.user_data)).all()
     return movies
 
-@router.get("/movie/{id}")
+@router.get("/movie/{id}", response_model=structure.MovieResponseSchema)
 def get_movie_by_id(id: int, db: Session = Depends(get_db)):
-    movie = db.query(models.Movie).filter(models.Movie.id_movie == id).first()
+    movie = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors), joinedload(models.Movie.reviews), joinedload(models.Movie.reviews).joinedload(models.Review.user_data)).filter(models.Movie.id_movie == id).first()
     if not movie:
             raise HTTPException(status_code=404, detail="Movie not found")
+    
+    return movie
     
 
 # FAVORITES

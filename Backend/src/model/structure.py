@@ -2,6 +2,39 @@ from typing import List
 from pydantic import BaseModel, field_validator, Field
 from datetime import date
 
+class ShortDataMovieResponseSchema(BaseModel):
+    title: str
+    rating: float
+
+    class Config:
+        from_attributes = True
+
+class ReviewResponseSchema(BaseModel):
+    id_user: int
+    text: str
+    created_at: date
+    id_movie: ShortDataMovieResponseSchema = Field(validation_alias="movie_data")
+
+    class Config:
+        from_attributes = True
+        populate_by_name = True
+
+class ShortReviewResponseSchema(BaseModel):
+    text: str
+    created_at: date
+    nickname: str = Field(validation_alias="user_data")
+
+    class Config:
+        from_attributes = True
+        populate_by_name = True
+    
+    @field_validator("nickname", mode="before")
+    @classmethod
+    def get_nickname_from_obj(cls, value):
+        if hasattr(value, "nickname"):
+            return value.nickname
+        return value
+
 class MovieResponseSchema(BaseModel):
     id_movie: int
     title: str
@@ -14,6 +47,7 @@ class MovieResponseSchema(BaseModel):
     rating: float
     genres: List[str]
     actors: List[str]
+    reviews: List[ShortReviewResponseSchema]
 
     class Config:
         from_attributes = True
@@ -25,13 +59,6 @@ class MovieResponseSchema(BaseModel):
             return [g.name if hasattr(g, "name") else g.get("name") for g in value]
         
         return value
-
-class ShortDataMovieResponseSchema(BaseModel):
-    title: str
-    rating: float
-
-    class Config:
-        from_attributes = True
     
 class FavoriteResponseSchema(BaseModel):
     id_user: int

@@ -32,6 +32,7 @@ class Movie(Base):
     
     genres = relationship("Genre", secondary=lambda: MovieGenre.__table__)
     actors = relationship("Actors", secondary=lambda: MovieActors.__table__)
+    reviews = relationship("Review")
 
 class Actors(Base):
     __tablename__ = quoted_name("actors", True)
@@ -76,10 +77,11 @@ class Review(Base):
     text = Column(String(255), nullable=False)
     created_at = Column(Date, nullable=False)
 
-    id_user = Column(Integer, ForeignKey(User.id_user), nullable=False)
-    id_movie = Column(Integer, ForeignKey(Movie.id_movie), nullable=False)
+    id_user = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('user', True)}.id_user", ondelete="CASCADE"), primary_key=True)
+    id_movie = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('movie', True)}.id_movie", ondelete="CASCADE"), primary_key=True)
 
     movie_data = relationship("Movie")
+    user_data = relationship("User")
 
 class Rating(Base):
     __tablename__ = quoted_name("rating", True)
