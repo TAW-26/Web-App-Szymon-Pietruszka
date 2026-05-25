@@ -17,6 +17,14 @@ def get_users(db: Session = Depends(get_db)):
     users = db.query(models.User).all()
     return users
 
+@router.get("/user/{id}")
+def get_users(id: int, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id_user == id).first()
+    if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+    
+    return user
+
 @router.get("/movies")
 def get_users(db: Session = Depends(get_db)):
     movies = db.query(models.Movie).all()
@@ -27,4 +35,5 @@ def get_users(id: int, db: Session = Depends(get_db)):
     movie = db.query(models.Movie).filter(models.Movie.id_movie == id).first()
     if not movie:
             raise HTTPException(status_code=404, detail="Movie not found")
+    
     return movie
