@@ -47,10 +47,20 @@ def get_movie_by_id(id: int, db: Session = Depends(get_db)):
 
 # FAVORITES
 
-@router.get("/favorites/{id}/favorite", response_model=structure.FavoriteResponseSchema)
+@router.get("/user/{id}/favorites", response_model=structure.FavoriteResponseSchema)
 def get_user_favortie(id: int, db: Session = Depends(get_db)):
     favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == id).first()
     if not favorites:
             raise HTTPException(status_code=404, detail="Favortie movies not found")
     
     return favorites
+
+# REVIEW
+
+@router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
+def get_user_favortie(id: int, db: Session = Depends(get_db)):
+    reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()
+    if not reviews:
+            raise HTTPException(status_code=404, detail="Reviews movies not found")
+    
+    return reviews

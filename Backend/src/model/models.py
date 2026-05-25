@@ -14,6 +14,7 @@ class User(Base):
     birthdate =Column(Date)
     gender = Column(String(20))
     favorite = relationship("Movie", secondary=lambda: Favorite.__table__)
+    review = relationship("Review")
 
 class Movie(Base):
     __tablename__ = quoted_name("movie", True)
@@ -74,8 +75,11 @@ class Review(Base):
     id_review = Column(Integer, primary_key=True, index=True)
     text = Column(String(255), nullable=False)
     created_at = Column(Date, nullable=False)
+
     id_user = Column(Integer, ForeignKey(User.id_user), nullable=False)
     id_movie = Column(Integer, ForeignKey(Movie.id_movie), nullable=False)
+
+    movie_data = relationship("Movie")
 
 class Rating(Base):
     __tablename__ = quoted_name("rating", True)
