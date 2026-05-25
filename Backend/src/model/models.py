@@ -14,7 +14,8 @@ class User(Base):
     gender = Column(String(20))
 
 class Movie(Base):
-    __tablename__ = "movie"
+    __tablename__ = quoted_name("movie", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_movie = Column(Integer, primary_key=True, index=True)
     title = Column(String(100), nullable=False)
@@ -27,37 +28,43 @@ class Movie(Base):
     rating = Column(Numeric(precision=3, scale=2), default=0.00)
 
 class Actors(Base):
-    __tablename__ = "actors"
+    __tablename__ = quoted_name("actors", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_actor = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
 
 class MovieActors(Base):
-    __tablename__ = "movie_actors"
+    __tablename__ = quoted_name("movie_actors", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_actor = Column(Integer, ForeignKey(Actors.id_actor, ondelete="CASCADE"), primary_key=True)
     id_movie = Column(Integer, ForeignKey(Movie.id_movie, ondelete="CASCADE"), primary_key=True)
 
 class Genre(Base):
-    __tablename__ = "genre"
+    __tablename__ = quoted_name("genre", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_genre = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
 
 class MovieGenre(Base):
-    __tablename__ = "movie_genre"
+    __tablename__ = quoted_name("movie_genre", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_movie = Column(Integer, ForeignKey(Movie.id_movie, ondelete="CASCADE"), primary_key=True)
     id_genre = Column(Integer, ForeignKey(Genre.id_genre, ondelete="CASCADE"), primary_key=True)
 
 class Favorite(Base):
-    __tablename__ = "favorite"
+    __tablename__ = quoted_name("favorite", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_user = Column(Integer, ForeignKey(User.id_user , ondelete="CASCADE"), primary_key=True)
     id_movie = Column(Integer, ForeignKey(Movie.id_movie, ondelete="CASCADE"), primary_key=True)
 
 class Review(Base):
-    __tablename__ = "review"
+    __tablename__ = quoted_name("review", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_review = Column(Integer, primary_key=True, index=True)
     text = Column(String(255), nullable=False)
@@ -66,7 +73,8 @@ class Review(Base):
     id_movie = Column(Integer, ForeignKey(Movie.id_movie), nullable=False)
 
 class Rating(Base):
-    __tablename__ = "rating"
+    __tablename__ = quoted_name("rating", True)
+    __table_args__ = {"schema": "moviecheck"}
 
     id_rating = Column(Integer, primary_key=True, index=True)
     id_user = Column(Integer, ForeignKey(User.id_user), nullable=False)
