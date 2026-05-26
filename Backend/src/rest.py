@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter
 from typing import List
+from passlib.context import CryptContext
 
 from src.database.connect import engine, get_db
 from src.model import models
@@ -9,6 +10,7 @@ from src.model import structure
 
 router  = APIRouter()
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 models.Base.metadata.create_all(bind=engine)
 
 @router.get("/")
@@ -30,6 +32,33 @@ def get_user_by_id(id: int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="User not found")
     
     return user
+
+@router.put("/user")
+def put_new_data_user(data: structure.PutNewDataUser, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id_user == data.id_user).first()
+
+    if user:
+        if data.birthdate:
+            user.birthdate = data.birthdate
+            
+        if data.gender:
+            user.gender = data.gender
+            
+        if data.name and data.name.strip() != "":
+            user.name = data.name
+
+        if data.password and data.password.strip() != "":
+            hashed_password = pwd_context.hash(data.password)
+            user.password = hashed_password
+            
+        db.commit()
+        db.refresh(user)
+
+        return {"message": "Updated user data"}
+    return {"messgae": "There is no user with this ID"}
+
+        
+
 
 
 # MOVIE

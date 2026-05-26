@@ -1,6 +1,7 @@
 from typing import List
 from pydantic import BaseModel, field_validator, Field
 from datetime import date
+from typing import Optional
 
 class ShortDataMovieResponseSchema(BaseModel):
     title: str
@@ -113,3 +114,10 @@ class PutRating(BaseModel):
     id_user: int
     id_movie: int
     rating: int
+
+class PutNewDataUser(BaseModel):
+    id_user: int
+    name: Optional[str] = None
+    birthdate: Optional[date] = None
+    gender: Optional[str] = None
+    password: Optional[str] = None
