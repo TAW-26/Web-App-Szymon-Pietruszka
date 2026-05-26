@@ -50,6 +50,18 @@ def get_movie_by_id(id: int, db: Session = Depends(get_db)):
 
 # FAVORITES
 
+@router.put("/favorite")
+def put_movie_to_user_favortie(IDs: structure.PutFavorites, db: Session = Depends(get_db)):
+    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == IDs.id_user, models.Favorite.id_movie == IDs.id_movie).first()
+    if check_existence:
+         return {"message": "This movie was already add to favortie "}
+    
+    movie_to_favorites = models.Favorite(id_user=IDs.id_user, id_movie=IDs.id_movie)
+    db.add(movie_to_favorites)
+    db.commit()
+
+    return{"message": "Movie added to favorties"}
+
 @router.get("/user/{id}/favorites", response_model=structure.FavoriteResponseSchema)
 def get_user_favortie(id: int, db: Session = Depends(get_db)):
     favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == id).first()
@@ -57,7 +69,6 @@ def get_user_favortie(id: int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="Favortie movies not found")
     
     return favorites
-
 
 # REVIEW
 
