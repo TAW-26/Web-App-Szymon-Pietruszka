@@ -95,6 +95,18 @@ def get_user_review(id: int, db: Session = Depends(get_db)):
 
 # RATING
 
+@router.put("/rating")
+def put_rating(new_rating: structure.PutRating, db: Session = Depends(get_db)):
+    check_existence = db.query(models.Rating).filter(models.Rating.id_user == new_rating.id_user, models.Rating.id_movie == new_rating.id_movie).first()
+    if check_existence:
+         return {"message": "This user already set rate for this movie"}
+    
+    create_rating = models.Rating(id_user=new_rating.id_user, id_movie=new_rating.id_movie, rating=new_rating.rating)
+    db.add(create_rating)
+    db.commit()
+
+    return{"message": "New rate added to rating"}
+
 @router.get("/user/{id}/ratings", response_model=structure.UserRatingResponseSchema)
 def get_user_rating(id: int, db: Session = Depends(get_db)):
     rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == id).first()

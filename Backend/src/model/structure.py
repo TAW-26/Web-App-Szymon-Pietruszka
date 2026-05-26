@@ -108,3 +108,8 @@ class PutReview(BaseModel):
     id_movie: int
     text: str
     created_at: date   
+
+class PutRating(BaseModel):
+    id_user: int
+    id_movie: int
+    rating: int
