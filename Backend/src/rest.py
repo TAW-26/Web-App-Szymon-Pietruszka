@@ -72,6 +72,18 @@ def get_user_favortie(id: int, db: Session = Depends(get_db)):
 
 # REVIEW
 
+@router.put("/review")
+def put_review(new_review: structure.PutReview, db: Session = Depends(get_db)):
+    check_existence = db.query(models.Review).filter(models.Review.id_user == new_review.id_user, models.Review.id_movie == new_review.id_movie).first()
+    if check_existence:
+         return {"message": "This user already create review for this movie"}
+    
+    create_review = models.Review(id_user=new_review.id_user, id_movie=new_review.id_movie, text=new_review.text, created_at=new_review.created_at)
+    db.add(create_review)
+    db.commit()
+
+    return{"message": "New review added to review"}
+
 @router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
 def get_user_review(id: int, db: Session = Depends(get_db)):
     reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()

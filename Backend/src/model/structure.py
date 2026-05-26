@@ -102,4 +102,9 @@ class UserRatingResponseSchema(BaseModel):
 class PutFavorites(BaseModel):
     id_user: int
     id_movie: int
-    
+
+class PutReview(BaseModel):
+    id_user: int
+    id_movie: int
+    text: str
+    created_at: date   
