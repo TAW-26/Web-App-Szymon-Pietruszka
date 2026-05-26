@@ -98,4 +98,8 @@ class UserRatingResponseSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+class PutFavorites(BaseModel):
+    id_user: int
+    id_movie: int
     
