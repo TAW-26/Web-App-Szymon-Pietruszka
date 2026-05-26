@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter
 from typing import List
@@ -12,6 +12,15 @@ router  = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 models.Base.metadata.create_all(bind=engine)
+
+def get_user(ID: int, db: Session):
+    user = db.query(models.User).filter(models.User.id_user == ID).first()   
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with ID {ID} does not exist")
+    
+    return user
+
 
 @router.get("/")
 def read_root():
@@ -27,37 +36,31 @@ def get_users(db: Session = Depends(get_db)):
 
 @router.get("/user/{id}")
 def get_user_by_id(id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id_user == id).first()
-    if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-    
-    return user
+    user = get_user(id, db)
 
 @router.put("/user")
-def put_new_data_user(data: structure.PutNewDataUser, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id_user == data.id_user).first()
+def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Session = Depends(get_db)):
+    user = get_user(data.id_user, db)
 
-    if user:
-        if data.birthdate:
-            user.birthdate = data.birthdate
-            
-        if data.gender:
-            user.gender = data.gender
-            
-        if data.name and data.name.strip() != "":
-            user.name = data.name
-
-        if data.password and data.password.strip() != "":
-            hashed_password = pwd_context.hash(data.password)
-            user.password = hashed_password
-
-        db.commit()
-        db.refresh(user)
-
-        return {"message": "Updated user data"}
-    return {"messgae": "There is no user with this ID"}
-
+    if data.birthdate:
+        user.birthdate = data.birthdate
         
+    if data.gender:
+        user.gender = data.gender
+        
+    if data.name and data.name.strip() != "":
+        user.name = data.name
+
+    if data.password and data.password.strip() != "":
+        hashed_password = pwd_context.hash(data.password)
+        user.password = hashed_password
+
+    db.commit()
+    db.refresh(user)
+
+    response.status_code = status.HTTP_204_NO_CONTENT
+    return {"message": "Updated user data"}
+
 
 # MOVIE
 
@@ -69,24 +72,33 @@ def get_movies(db: Session = Depends(get_db)):
 @router.get("/movie/{id}", response_model=structure.MovieResponseSchema)
 def get_movie_by_id(id: int, db: Session = Depends(get_db)):
     movie = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors), joinedload(models.Movie.reviews), joinedload(models.Movie.reviews).joinedload(models.Review.user_data)).filter(models.Movie.id_movie == id).first()
+    
     if not movie:
-            raise HTTPException(status_code=404, detail="Movie not found")
+        raise HTTPException(status_code=404, detail="Movie not found")
     
     return movie
     
 
 # FAVORITES
 
-@router.put("/favorite")
-def put_movie_to_user_favortie(IDs: structure.PutFavorites, db: Session = Depends(get_db)):
-    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == IDs.id_user, models.Favorite.id_movie == IDs.id_movie).first()
-    if check_existence:
-         return {"message": "This movie was already add to favortie "}
+@router.post("/favorite")
+def post_movie_to_user_favortie(new_favorite: structure.PutFavorites, response: Response, db: Session = Depends(get_db)):
+    user = get_user(new_favorite.id_user, db)
     
-    movie_to_favorites = models.Favorite(id_user=IDs.id_user, id_movie=IDs.id_movie)
+    movie_exists = db.query(models.Movie).filter(models.Movie.id_movie == new_favorite.id_movie).first()
+    if not movie_exists:
+        raise HTTPException(status_code=404, detail=f"Movie with ID {new_favorite.id_movie} does not exist")
+
+    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == new_favorite.id_user, models.Favorite.id_movie == new_favorite.id_movie).first()
+    
+    if check_existence:
+        raise HTTPException(status_code=409, detail="This movie was already add to favortie")
+    
+    movie_to_favorites = models.Favorite(id_user=new_favorite.id_user, id_movie=new_favorite.id_movie)
     db.add(movie_to_favorites)
     db.commit()
 
+    response.status_code = status.HTTP_201_CREATED
     return{"message": "Movie added to favorties"}
 
 # DELETE TYMCZASOWE BO BEZ JWT
@@ -96,7 +108,7 @@ def delete_movie_from_favorite(id: int, user_id: int, db: Session = Depends(get_
     delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id).first()
 
     if not delete_favorite:
-            raise HTTPException(status_code=404, detail="Favortie movies not found to delete")
+        raise HTTPException(status_code=404, detail="Favortie movies not found to delete")
     
     if delete_favorite.id_user != user_id:
         raise HTTPException(status_code=403, detail="You cannot delete this movie from favorite")
@@ -108,8 +120,9 @@ def delete_movie_from_favorite(id: int, user_id: int, db: Session = Depends(get_
 @router.get("/user/{id}/favorites", response_model=structure.FavoriteResponseSchema)
 def get_user_favortie(id: int, db: Session = Depends(get_db)):
     favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == id).first()
+    
     if not favorites:
-            raise HTTPException(status_code=404, detail="Favortie movies not found")
+        raise HTTPException(status_code=404, detail="Favortie movies not found")
     
     return favorites
 
@@ -130,8 +143,9 @@ def put_review(new_review: structure.PutReview, db: Session = Depends(get_db)):
 @router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
 def get_user_review(id: int, db: Session = Depends(get_db)):
     reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()
+    
     if not reviews:
-            raise HTTPException(status_code=404, detail="Reviews movies not found")
+        raise HTTPException(status_code=404, detail="Reviews movies not found")
     
     return reviews
 
