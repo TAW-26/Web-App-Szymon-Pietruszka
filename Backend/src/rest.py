@@ -50,7 +50,7 @@ def put_new_data_user(data: structure.PutNewDataUser, db: Session = Depends(get_
         if data.password and data.password.strip() != "":
             hashed_password = pwd_context.hash(data.password)
             user.password = hashed_password
-            
+
         db.commit()
         db.refresh(user)
 
@@ -58,8 +58,6 @@ def put_new_data_user(data: structure.PutNewDataUser, db: Session = Depends(get_
     return {"messgae": "There is no user with this ID"}
 
         
-
-
 
 # MOVIE
 
@@ -90,6 +88,22 @@ def put_movie_to_user_favortie(IDs: structure.PutFavorites, db: Session = Depend
     db.commit()
 
     return{"message": "Movie added to favorties"}
+
+# DELETE TYMCZASOWE BO BEZ JWT
+
+@router.delete("/favorite/{id}")
+def delete_movie_from_favorite(id: int, user_id: int, db: Session = Depends(get_db)):
+    delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id).first()
+
+    if not delete_favorite:
+            raise HTTPException(status_code=404, detail="Favortie movies not found to delete")
+    
+    if delete_favorite.id_user != user_id:
+        raise HTTPException(status_code=403, detail="You cannot delete this movie from favorite")
+    
+    db.delete(delete_favorite)
+    db.commit()
+    return {"message": "Deleted movie from favorite"}
 
 @router.get("/user/{id}/favorites", response_model=structure.FavoriteResponseSchema)
 def get_user_favortie(id: int, db: Session = Depends(get_db)):
