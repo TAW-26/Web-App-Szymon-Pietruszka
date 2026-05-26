@@ -139,7 +139,7 @@ $$ LANGUAGE plpgsql;
 
 -- EXAMPLES DATA --
 INSERT INTO MovieCheck.user (nickname, name, email, password, birthdate, gender) VALUES
-	('jandow', 'Jan Dow', 'jan.dow@example.com', 'super_tajne_haslo_123', '1995-04-12', 'Mężczyzna');
+	('JohnySilverhand', 'Jan Kowalski', 'js@example.com', 'password', '1995-04-12', 'Mężczyzna');
 
 INSERT INTO MovieCheck.movie (title, description, director, composer, production, year) VALUES 
 	('Piraci z Karaibów: Klątwa Czarnej Perły', 'opis', 'Gore Verbinski', 'Hans Zimmer', 'Jerry Bruckheimer', 2003),
@@ -160,28 +160,34 @@ INSERT INTO MovieCheck.actors (name) VALUES
 	('Matt Damon');
 
 INSERT INTO MovieCheck.movie_actors (id_movie, id_actor) VALUES
-	(4, 1),
-	(4, 2),
-	(4, 3),
-	(4, 4),
-	(4, 5),
-	(4, 6),
+	(1, 1),
+	(1, 2),
+	(1, 3),
+	(1, 4),
+	(1, 5),
+	(1, 6),
 	
-	(5, 7),
-	(5, 8),
-	(5, 9),
-	(5, 10),
-	(5, 11),
-	(5, 12);
+	(2, 7),
+	(2, 8),
+	(2, 9),
+	(2, 10),
+	(2, 11),
+	(2, 12);
 
-SELECT * FROM MovieCheck.user;
+INSERT INTO moviecheck.genre (name) 
+VALUES 
+    ('Adventure'),
+    ('Action'),
+    ('Thriler'),
+    ('Science-fiction'),
+    ('Fantasy');
 
-SELECT * FROM MovieCheck.movie;
+INSERT INTO moviecheck.movie_genre (id_movie, id_genre)
+SELECT 1, id_genre 
+FROM moviecheck.genre 
+WHERE name IN ('Fantasy', 'Adventure');
 
-SELECT * FROM MovieCheck.actors;
-
-SELECT m.title AS movie, a.name AS actors 
-FROM MovieCheck.movie_actors ma 
-JOIN MovieCheck.movie m ON ma.id_movie = m.id_movie
-JOIN MovieCheck.actors a ON ma.id_actor = a.id_actor
-WHERE m.id_movie IN (4,5)
+INSERT INTO moviecheck.movie_genre (id_movie, id_genre)
+SELECT 2, id_genre 
+FROM moviecheck.genre 
+WHERE name IN ('Science-fiction');
