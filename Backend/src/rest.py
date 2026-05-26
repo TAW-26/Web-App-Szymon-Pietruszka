@@ -17,9 +17,17 @@ def get_user(ID: int, db: Session):
     user = db.query(models.User).filter(models.User.id_user == ID).first()   
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with ID {ID} does not exist")
+        raise HTTPException(status_code=404, detail=f"User with ID {ID} does not exist")
     
     return user
+
+def get_movie(ID: int, db: Session):
+    movie = db.query(models.Movie).filter(models.Movie.id_movie == ID).first()   
+
+    if not movie:
+        raise HTTPException(status_code=404, detail=f"Movie with ID {ID} does not exist")
+    
+    return movie
 
 
 @router.get("/")
@@ -71,6 +79,8 @@ def get_movies(db: Session = Depends(get_db)):
 
 @router.get("/movie/{id}", response_model=structure.MovieResponseSchema)
 def get_movie_by_id(id: int, db: Session = Depends(get_db)):
+    get_movie(id, db)
+
     movie = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors), joinedload(models.Movie.reviews), joinedload(models.Movie.reviews).joinedload(models.Review.user_data)).filter(models.Movie.id_movie == id).first()
     
     if not movie:
@@ -128,20 +138,28 @@ def get_user_favortie(id: int, db: Session = Depends(get_db)):
 
 # REVIEW
 
-@router.put("/review")
-def put_review(new_review: structure.PutReview, db: Session = Depends(get_db)):
+@router.post("/review")
+def post_review(new_review: structure.PutReview, response: Response, db: Session = Depends(get_db)):
+    get_user(new_review.id_user, db)
+
+    get_movie(new_review.id_movie, db)
+
     check_existence = db.query(models.Review).filter(models.Review.id_user == new_review.id_user, models.Review.id_movie == new_review.id_movie).first()
+    
     if check_existence:
-         return {"message": "This user already create review for this movie"}
+        raise HTTPException(status_code=409, detail="This user already create review for this movie")
     
     create_review = models.Review(id_user=new_review.id_user, id_movie=new_review.id_movie, text=new_review.text, created_at=new_review.created_at)
     db.add(create_review)
     db.commit()
 
+    response.status_code = status.HTTP_201_CREATED
     return{"message": "New review added to review"}
 
 @router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
 def get_user_review(id: int, db: Session = Depends(get_db)):
+    get_user(id, db)
+
     reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()
     
     if not reviews:
@@ -152,22 +170,31 @@ def get_user_review(id: int, db: Session = Depends(get_db)):
 
 # RATING
 
-@router.put("/rating")
-def put_rating(new_rating: structure.PutRating, db: Session = Depends(get_db)):
+@router.post("/rating")
+def post_rating(new_rating: structure.PutRating, response: Response, db: Session = Depends(get_db)):
+    get_user(new_rating.id_user, db)
+
+    get_movie(new_rating.id_movie, db)
+
     check_existence = db.query(models.Rating).filter(models.Rating.id_user == new_rating.id_user, models.Rating.id_movie == new_rating.id_movie).first()
+    
     if check_existence:
-         return {"message": "This user already set rate for this movie"}
+        raise HTTPException(status_code=409, detail="This user already set rate for this movie")
     
     create_rating = models.Rating(id_user=new_rating.id_user, id_movie=new_rating.id_movie, rating=new_rating.rating)
     db.add(create_rating)
     db.commit()
 
+    response.status_code = status.HTTP_201_CREATED
     return{"message": "New rate added to rating"}
 
 @router.get("/user/{id}/ratings", response_model=structure.UserRatingResponseSchema)
 def get_user_rating(id: int, db: Session = Depends(get_db)):
+    get_user(id, db)
+
     rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == id).first()
+    
     if not rating:
-            raise HTTPException(status_code=404, detail="Reviews movies not found")
+        raise HTTPException(status_code=404, detail="Reviews movies not found")
     
     return rating
