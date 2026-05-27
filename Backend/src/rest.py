@@ -122,21 +122,25 @@ def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Se
     response.status_code = status.HTTP_204_NO_CONTENT
     return {"message": "Updated user data"}
 
-@router.post("/register", response_model=structure.UserRespone, status_code=status.HTTP_201_CREATED)
-async def register(user_data: structure.Register, response: Response, db: Session = Depends(get_db)):
+@router.post("/register", response_model=structure.CreateAccount, status_code=201)
+async def register(user_data: structure.UserRespone, db: Session = Depends(get_db)):
     email = db.query(models.User).filter(models.User.email == user_data.email).first()
+    nickname = db.query(models.User).filter(models.User.nickname == user_data.nickname).first()
 
-    if email:
-        raise HTTPException(status_code=400, detail=f"User with email: {user_data.email} already exist")
+    if email or nickname:
+        field = "email" if email else "nickname"
+        value = user_data.email if email else user_data.nickname
+        raise HTTPException(status_code=400, detail=f"User with {field}: {value} already exist")
+    
     
     hashed_password = get_password_hash(user_data.password)
 
     create_account = models.User(email=user_data.email, nickname=user_data.nickname, password=hashed_password)
     db.add(create_account)
     db.commit()
+    db.refresh(create_account)
 
-    response.status_code = status.HTTP_201_CREATED
-    return {"email": user_data.email, "nickname": user_data.nickname }
+    return create_account
 
 @router.post("/login")
 async def login(data: structure.Login, db: Session = Depends(get_db)):
