@@ -2,15 +2,21 @@ from fastapi import Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter
 from typing import List
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
+from datetime import datetime, timedelta, timezone
+import jwt
 
 from src.database.connect import engine, get_db
 from src.model import models
 from src.model import structure
+from src.config import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM
 
 router  = APIRouter()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
 models.Base.metadata.create_all(bind=engine)
 
 def get_user(ID: int, db: Session):
@@ -28,6 +34,19 @@ def get_movie(ID: int, db: Session):
         raise HTTPException(status_code=404, detail=f"Movie with ID {ID} does not exist")
     
     return movie
+
+def get_password_hash(password: str):
+    return pwd_context.hash(password)
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
+
+def create_JWT(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=15))
+    to_encode.update({"exp": expire})
+
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 @router.get("/")
@@ -69,6 +88,21 @@ def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Se
     response.status_code = status.HTTP_204_NO_CONTENT
     return {"message": "Updated user data"}
 
+@router.post("/register", response_model=structure.Register, status_code=status.HTTP_201_CREATED)
+async def register(user_data: structure.Register, response: Response, db: Session = Depends(get_db)):
+    email = db.query(models.User).filter(models.User.email == user_data.email).first()
+
+    if not email:
+        raise HTTPException(status_code=400, detail=f"User with email: {user_data.email} already exist")
+    
+    hashed_password = get_password_hash(user_data.password)
+
+    create_account = models.User(email=user_data.email, nickname=user_data.nickname, password=hashed_password)
+    db.add(create_account)
+    db.commit()
+
+    response.status_code = status.HTTP_201_CREATED
+    return {"email": user_data.email, "nickname": user_data.nickname }
 
 # MOVIE
 
