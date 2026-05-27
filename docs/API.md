@@ -96,24 +96,19 @@ Zwraca szczegółowe informacje o konkretnym filmie
 
 ### Dodaj film do ulubionych
 
-Przypisuje wybrany film do listy ulubionych danego użytkownika
+Przypisuje wybrany film do listy ulubionych użytkownika
 
 * **Metoda:** `POST`
-* **Ścieżka:** `/favorite`
+* **Ścieżka:** `/favorite/{id}`
+* **Autoryzacja:** `Bearer Token`
 
-```json
-{
-    "id_user": 1,
-    "id_movie": 2
-}
-```
 
 ### Usuń film z ulubionych
 
 Usuwa film z listy ulubionych użytkownika
 
 * **Metoda:** `DELETE`
-* **Ścieżka:** `/favorite/{movie_id}`
+* **Ścieżka:** `/favorite/delete/{movie_id}`
 * **Autoryzacja:** `Bearer Token`
 
 ### Pobierz ulubione filmy użytkownika

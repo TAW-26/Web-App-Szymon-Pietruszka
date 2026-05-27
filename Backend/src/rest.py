@@ -177,27 +177,25 @@ def get_movie_by_id(id: int, db: Session = Depends(get_db)):
 
 # FAVORITES
 
-@router.post("/favorite")
-def post_movie_to_user_favortie(new_favorite: structure.PutFavorites, response: Response, db: Session = Depends(get_db)):
-    user = get_user_by_ID(new_favorite.id_user, db)
+@router.post("/favorite/{id}", status_code=201)
+def post_movie_to_user_favortie(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     
-    movie_exists = db.query(models.Movie).filter(models.Movie.id_movie == new_favorite.id_movie).first()
+    movie_exists = db.query(models.Movie).filter(models.Movie.id_movie == id).first()
     if not movie_exists:
-        raise HTTPException(status_code=404, detail=f"Movie with ID {new_favorite.id_movie} does not exist")
+        raise HTTPException(status_code=404, detail=f"Movie with ID {id} does not exist")
 
-    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == new_favorite.id_user, models.Favorite.id_movie == new_favorite.id_movie).first()
+    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == current_user.id_user, models.Favorite.id_movie == id).first()
     
     if check_existence:
         raise HTTPException(status_code=409, detail="This movie was already add to favortie")
     
-    movie_to_favorites = models.Favorite(id_user=new_favorite.id_user, id_movie=new_favorite.id_movie)
+    movie_to_favorites = models.Favorite(id_user=current_user.id_user, id_movie=id)
     db.add(movie_to_favorites)
     db.commit()
 
-    response.status_code = status.HTTP_201_CREATED
     return{"message": "Movie added to favorties"}
 
-@router.delete("/favorite/{id}", status_code=204)
+@router.delete("/favorite/delete/{id}", status_code=204)
 def delete_movie_from_favorite(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id, models.Favorite.id_user == current_user.id_user).first()
 
