@@ -141,8 +141,8 @@ Publikuje tekstową recenzję do wybranego filmu
 Pobiera listę recenzji napisanych przez konkretnego użytkownika
 
 * **Metoda:** `GET`
-* **Ścieżka:** `/user/{user_id}/reviews`
-* **Przykład:** `/user/1/reviews`
+* **Ścieżka:** `/reviews/user`
+* **Autoryzacja:** `Bearer Token`
 
 ### Dodaj nową ocenę
 

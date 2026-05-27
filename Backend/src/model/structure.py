@@ -100,23 +100,23 @@ class UserRatingResponseSchema(BaseModel):
     class Config:
         from_attributes = True
 
-class CreateNewReview(BaseModel):
+class CreateNewReviewSchema(BaseModel):
     id_movie: int
     text: str
 
-class PutRating(BaseModel):
+class CreateRatingSchema(BaseModel):
     id_user: int
     id_movie: int
     rating: int
 
-class PutNewDataUser(BaseModel):
+class UpdateDataUserSchema(BaseModel):
     id_user: int
     name: Optional[str] = None
     birthdate: Optional[date] = None
     gender: Optional[str] = None
     password: Optional[str] = None
 
-class CreateAccount(BaseModel):
+class CreateAccountSchema(BaseModel):
     email: str
     nickname: str
     password: str
@@ -124,7 +124,7 @@ class CreateAccount(BaseModel):
     class Config:
         from_attributes = True
 
-class UserRespone(BaseModel):
+class UserResponeSchema(BaseModel):
     email: str
     nickname: str
     password: str
@@ -132,6 +132,6 @@ class UserRespone(BaseModel):
     class Config:
         from_attributes = True
 
-class Login(BaseModel):
+class LoginSchema(BaseModel):
     nickname: str
     password: str

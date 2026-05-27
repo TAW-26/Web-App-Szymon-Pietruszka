@@ -91,7 +91,7 @@ def read_root():
 
 # USER
 
-@router.get("/user/me", response_model=structure.UserRespone)
+@router.get("/user/me", response_model=structure.UserResponeSchema)
 async def get_me(current_user: models.User = Depends(get_current_user)):
     return current_user
 
@@ -100,7 +100,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     user = get_user_by_ID(id, db)
 
 @router.put("/user")
-def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Session = Depends(get_db)):
+def put_new_data_user(data: structure.UserResponeSchema, response: Response, db: Session = Depends(get_db)):
     user = get_user_by_ID(data.id_user, db)
 
     if data.birthdate:
@@ -122,8 +122,8 @@ def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Se
     response.status_code = status.HTTP_204_NO_CONTENT
     return {"message": "Updated user data"}
 
-@router.post("/register", response_model=structure.CreateAccount, status_code=201)
-async def register(user_data: structure.UserRespone, db: Session = Depends(get_db)):
+@router.post("/register", response_model=structure.CreateAccountSchema, status_code=201)
+async def register(user_data: structure.UserResponeSchema, db: Session = Depends(get_db)):
     email = db.query(models.User).filter(models.User.email == user_data.email).first()
     nickname = db.query(models.User).filter(models.User.nickname == user_data.nickname).first()
 
@@ -143,7 +143,7 @@ async def register(user_data: structure.UserRespone, db: Session = Depends(get_d
     return create_account
 
 @router.post("/login")
-async def login(data: structure.Login, db: Session = Depends(get_db)):
+async def login(data: structure.LoginSchema, db: Session = Depends(get_db)):
     user = get_user_by_nickname(data.nickname, db)
 
     if not verify_password(data.password, user.password):
@@ -218,7 +218,7 @@ def get_user_favortie_movies(db: Session = Depends(get_db), current_user: models
 # REVIEW
 
 @router.post("/review")
-def post_review(new_review: structure.CreateNewReview, response: Response, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+def post_review(new_review: structure.CreateNewReviewSchema, response: Response, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     get_movie(new_review.id_movie, db)
 
     check_existence = db.query(models.Review).filter(models.Review.id_user == current_user.id_user, models.Review.id_movie == new_review.id_movie).first()
@@ -233,11 +233,9 @@ def post_review(new_review: structure.CreateNewReview, response: Response, db: S
     response.status_code = status.HTTP_201_CREATED
     return{"message": "New review added to review"}
 
-@router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
-def get_user_review(id: int, db: Session = Depends(get_db)):
-    get_user_by_ID(id, db)
-
-    reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()
+@router.get("/reviews/user", response_model=structure.UserReviewsResponseSchema)
+def get_user_review(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == current_user.id_user).first()
     
     if not reviews:
         raise HTTPException(status_code=404, detail="Reviews movies not found")
@@ -248,7 +246,7 @@ def get_user_review(id: int, db: Session = Depends(get_db)):
 # RATING
 
 @router.post("/rating")
-def post_rating(new_rating: structure.PutRating, response: Response, db: Session = Depends(get_db)):
+def post_rating(new_rating: structure.CreateRatingSchema, response: Response, db: Session = Depends(get_db)):
     get_user_by_ID(new_rating.id_user, db)
 
     get_movie(new_rating.id_movie, db)
