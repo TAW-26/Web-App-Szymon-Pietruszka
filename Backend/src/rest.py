@@ -104,6 +104,18 @@ async def register(user_data: structure.Register, response: Response, db: Sessio
     response.status_code = status.HTTP_201_CREATED
     return {"email": user_data.email, "nickname": user_data.nickname }
 
+@router.post("/login")
+async def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = get_user(data.username, db)
+
+    if verify_password(data.password, user.password):
+        raise HTTPException(status_code=401, detail="Niepoprawny e-mail lub hasło", headers={"WWW-Authenticate": "Bearer"})
+    
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_JWT(data={"sub": user.email}, expires_delta=access_token_expires)
+
+    return {"access_token": access_token, "token_type": "bearer"}
+
 # MOVIE
 
 @router.get("/movies", response_model=List[structure.MovieResponseSchema])
