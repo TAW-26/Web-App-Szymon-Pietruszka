@@ -85,6 +85,10 @@ class UserReviewsResponseSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class CreateNewReviewSchema(BaseModel):
+    id_movie: int
+    text: str
+
 class RatingResponseSchema(BaseModel):
     rating: int
     id_movie: ShortDataMovieResponseSchema = Field(validation_alias="movie_data")
@@ -93,21 +97,16 @@ class RatingResponseSchema(BaseModel):
         from_attributes = True
         populate_by_name = True
 
+class CreateRatingSchema(BaseModel):
+    id_movie: int
+    rating: int
+
 class UserRatingResponseSchema(BaseModel):
     id_user: int
     ratings: List[RatingResponseSchema]
 
     class Config:
         from_attributes = True
-
-class CreateNewReviewSchema(BaseModel):
-    id_movie: int
-    text: str
-
-class CreateRatingSchema(BaseModel):
-    id_user: int
-    id_movie: int
-    rating: int
 
 class UpdateDataUserSchema(BaseModel):
     id_user: int

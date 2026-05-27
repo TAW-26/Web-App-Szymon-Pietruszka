@@ -150,10 +150,10 @@ Wystawia ocenę numeryczną dla konkretnego filmu
 
 * **Metoda:** `POST`
 * **Ścieżka:** `/rating`
+* **Autoryzacja:** `Bearer Token`
 
 ```json
 {
-    "id_user": 1,
     "id_movie": 2,
     "rating": 10
 }

@@ -217,8 +217,8 @@ def get_user_favortie_movies(db: Session = Depends(get_db), current_user: models
 
 # REVIEW
 
-@router.post("/review")
-def post_review(new_review: structure.CreateNewReviewSchema, response: Response, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+@router.post("/review", status_code=201)
+def post_review(new_review: structure.CreateNewReviewSchema, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     get_movie(new_review.id_movie, db)
 
     check_existence = db.query(models.Review).filter(models.Review.id_user == current_user.id_user, models.Review.id_movie == new_review.id_movie).first()
@@ -230,7 +230,6 @@ def post_review(new_review: structure.CreateNewReviewSchema, response: Response,
     db.add(create_review)
     db.commit()
 
-    response.status_code = status.HTTP_201_CREATED
     return{"message": "New review added to review"}
 
 @router.get("/reviews/user", response_model=structure.UserReviewsResponseSchema)
@@ -245,22 +244,19 @@ def get_user_review(db: Session = Depends(get_db), current_user: models.User = D
 
 # RATING
 
-@router.post("/rating")
-def post_rating(new_rating: structure.CreateRatingSchema, response: Response, db: Session = Depends(get_db)):
-    get_user_by_ID(new_rating.id_user, db)
-
+@router.post("/rating", status_code=201)
+def post_rating(new_rating: structure.CreateRatingSchema, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     get_movie(new_rating.id_movie, db)
 
-    check_existence = db.query(models.Rating).filter(models.Rating.id_user == new_rating.id_user, models.Rating.id_movie == new_rating.id_movie).first()
+    check_existence = db.query(models.Rating).filter(models.Rating.id_user == current_user.id_user, models.Rating.id_movie == new_rating.id_movie).first()
     
     if check_existence:
         raise HTTPException(status_code=409, detail="This user already set rate for this movie")
     
-    create_rating = models.Rating(id_user=new_rating.id_user, id_movie=new_rating.id_movie, rating=new_rating.rating)
+    create_rating = models.Rating(id_user=current_user.id_user, id_movie=new_rating.id_movie, rating=new_rating.rating)
     db.add(create_rating)
     db.commit()
 
-    response.status_code = status.HTTP_201_CREATED
     return{"message": "New rate added to rating"}
 
 @router.get("/user/{id}/ratings", response_model=structure.UserRatingResponseSchema)
