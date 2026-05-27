@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter
 from typing import List
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 import jwt
@@ -24,6 +24,14 @@ def get_user(ID: int, db: Session):
 
     if not user:
         raise HTTPException(status_code=404, detail=f"User with ID {ID} does not exist")
+    
+    return user
+
+def get_user_by_nickname(nickname: str, db: Session):
+    user = db.query(models.User).filter(models.User.nickname == nickname).first()   
+
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User with nickname: {nickname} does not exist")
     
     return user
 
@@ -105,10 +113,10 @@ async def register(user_data: structure.Register, response: Response, db: Sessio
     return {"email": user_data.email, "nickname": user_data.nickname }
 
 @router.post("/login")
-async def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = get_user(data.username, db)
+async def login(data: structure.Login, db: Session = Depends(get_db)):
+    user = get_user_by_nickname(data.nickname, db)
 
-    if verify_password(data.password, user.password):
+    if not verify_password(data.password, user.password):
         raise HTTPException(status_code=401, detail="Niepoprawny e-mail lub hasło", headers={"WWW-Authenticate": "Bearer"})
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
