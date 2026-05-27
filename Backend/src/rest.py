@@ -206,9 +206,9 @@ def delete_movie_from_favorite(id: int, db: Session = Depends(get_db), current_u
     db.commit()
     return {"message": "Deleted movie from favorite"}
 
-@router.get("/user/{id}/favorites", response_model=structure.FavoriteResponseSchema)
-def get_user_favortie(id: int, db: Session = Depends(get_db)):
-    favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == id).first()
+@router.get("/favorites/user", response_model=structure.FavoriteResponseSchema)
+def get_user_favortie_movies(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == current_user.id_user).first()
     
     if not favorites:
         raise HTTPException(status_code=404, detail="Favortie movies not found")
