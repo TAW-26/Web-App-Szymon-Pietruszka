@@ -127,13 +127,12 @@ Publikuje tekstową recenzję do wybranego filmu
 
 * **Metoda:** `POST`
 * **Ścieżka:** `/review`
+* **Autoryzacja:** `Bearer Token`
 
 ```json
 {
-    "id_user": 1,
     "id_movie": 1,
     "text": "I like it!",
-    "created_at": "2026-05-26"
 }
 ```
 

@@ -214,17 +214,15 @@ def get_user_favortie_movies(db: Session = Depends(get_db), current_user: models
 # REVIEW
 
 @router.post("/review")
-def post_review(new_review: structure.PutReview, response: Response, db: Session = Depends(get_db)):
-    get_user_by_ID(new_review.id_user, db)
-
+def post_review(new_review: structure.CreateNewReview, response: Response, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     get_movie(new_review.id_movie, db)
 
-    check_existence = db.query(models.Review).filter(models.Review.id_user == new_review.id_user, models.Review.id_movie == new_review.id_movie).first()
+    check_existence = db.query(models.Review).filter(models.Review.id_user == current_user.id_user, models.Review.id_movie == new_review.id_movie).first()
     
     if check_existence:
         raise HTTPException(status_code=409, detail="This user already create review for this movie")
     
-    create_review = models.Review(id_user=new_review.id_user, id_movie=new_review.id_movie, text=new_review.text, created_at=new_review.created_at)
+    create_review = models.Review(id_user=current_user.id_user, id_movie=new_review.id_movie, text=new_review.text, created_at=datetime.now(timezone.utc))
     db.add(create_review)
     db.commit()
 

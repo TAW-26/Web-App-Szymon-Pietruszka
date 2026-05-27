@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey, Numeric, SmallInteger, CheckConstraint, quoted_name
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Numeric, SmallInteger, CheckConstraint, quoted_name, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from src.database.connect import Base
 
 class User(Base):
@@ -78,7 +79,7 @@ class Review(Base):
 
     id_review = Column(Integer, primary_key=True, index=True)
     text = Column(String(255), nullable=False)
-    created_at = Column(Date, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     id_user = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('user', True)}.id_user", ondelete="CASCADE"), primary_key=True)
     id_movie = Column(Integer, ForeignKey(f"moviecheck.{quoted_name('movie', True)}.id_movie", ondelete="CASCADE"), primary_key=True)

@@ -100,11 +100,9 @@ class UserRatingResponseSchema(BaseModel):
     class Config:
         from_attributes = True
 
-class PutReview(BaseModel):
-    id_user: int
+class CreateNewReview(BaseModel):
     id_movie: int
     text: str
-    created_at: date   
 
 class PutRating(BaseModel):
     id_user: int
