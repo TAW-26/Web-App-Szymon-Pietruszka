@@ -1,4 +1,4 @@
-# MovieCheck
+![logo MovieCheck](../assets/MovieCheckBaner.png)
 
 Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie wykorzystywać algorytm, który na podstawie preferencji użytkownika będzie proponował filmy dopasowane do jego gustu. System będzie analizował wcześniejsze polubienia użytkownika, aby lepiej dopasować kolejne rekomendacje.
 
@@ -23,6 +23,7 @@ Aplikacja będzie posiadać następujące funkcjonalności:
 - HTML
 - SCSS
 - Node.js
+- Python
 - PostgreSQL
 - pgAdmin
 
