@@ -85,6 +85,10 @@ class UserReviewsResponseSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class CreateNewReviewSchema(BaseModel):
+    id_movie: int
+    text: str
+
 class RatingResponseSchema(BaseModel):
     rating: int
     id_movie: ShortDataMovieResponseSchema = Field(validation_alias="movie_data")
@@ -93,6 +97,10 @@ class RatingResponseSchema(BaseModel):
         from_attributes = True
         populate_by_name = True
 
+class CreateRatingSchema(BaseModel):
+    id_movie: int
+    rating: int
+
 class UserRatingResponseSchema(BaseModel):
     id_user: int
     ratings: List[RatingResponseSchema]
@@ -100,34 +108,14 @@ class UserRatingResponseSchema(BaseModel):
     class Config:
         from_attributes = True
 
-class PutFavorites(BaseModel):
-    id_user: int
-    id_movie: int
-
-class PutReview(BaseModel):
-    id_user: int
-    id_movie: int
-    text: str
-    created_at: date   
-
-class PutRating(BaseModel):
-    id_user: int
-    id_movie: int
-    rating: int
-
-class PutNewDataUser(BaseModel):
+class UpdateDataUserSchema(BaseModel):
     id_user: int
     name: Optional[str] = None
     birthdate: Optional[date] = None
     gender: Optional[str] = None
     password: Optional[str] = None
 
-class Register(BaseModel):
-    email: str
-    nickname: str
-    password: str
-
-class UserRespone(BaseModel):
+class CreateAccountSchema(BaseModel):
     email: str
     nickname: str
     password: str
@@ -135,6 +123,14 @@ class UserRespone(BaseModel):
     class Config:
         from_attributes = True
 
-class Login(BaseModel):
+class UserResponeSchema(BaseModel):
+    email: str
+    nickname: str
+    password: str
+
+    class Config:
+        from_attributes = True
+
+class LoginSchema(BaseModel):
     nickname: str
     password: str

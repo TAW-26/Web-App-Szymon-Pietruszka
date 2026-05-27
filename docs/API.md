@@ -12,7 +12,7 @@ Aplikacja będzie również umożliwiała przeglądanie listy filmów, wyszukiwa
 
 ---
 
-![Postman](./POSTMAN.png)
+![Postman](./postman.png)
 
 
 ## Autentykacja i Użytkownicy
@@ -96,35 +96,28 @@ Zwraca szczegółowe informacje o konkretnym filmie
 
 ### Dodaj film do ulubionych
 
-Przypisuje wybrany film do listy ulubionych danego użytkownika
+Przypisuje wybrany film do listy ulubionych użytkownika
 
 * **Metoda:** `POST`
-* **Ścieżka:** `/favorite`
+* **Ścieżka:** `/favorite/{id}`
+* **Autoryzacja:** `Bearer Token`
 
-```json
-{
-    "id_user": 1,
-    "id_movie": 2
-}
-```
 
 ### Usuń film z ulubionych
 
 Usuwa film z listy ulubionych użytkownika
 
 * **Metoda:** `DELETE`
-* **Ścieżka:** `/favorite/{movie_id}`
-* **Parametry Query:** `user_id`
-* **Przykład żądania:** `/favorite/2?user_id=2`
+* **Ścieżka:** `/favorite/delete/{movie_id}`
+* **Autoryzacja:** `Bearer Token`
 
 ### Pobierz ulubione filmy użytkownika
 
 Zwraca listę wszystkich filmów oznaczonych jako ulubione przez konkretnego użytkownika
 
 * **Metoda:** `GET`
-* **Ścieżka:** `/user/{user_id}/favorites`
-* **Przykład:** `/user/1/favorites`
-
+* **Ścieżka:** `/favorites/user`
+* **Autoryzacja:** `Bearer Token`
 
 ## Recenzje i Oceny
 
@@ -134,13 +127,12 @@ Publikuje tekstową recenzję do wybranego filmu
 
 * **Metoda:** `POST`
 * **Ścieżka:** `/review`
+* **Autoryzacja:** `Bearer Token`
 
 ```json
 {
-    "id_user": 1,
     "id_movie": 1,
     "text": "I like it!",
-    "created_at": "2026-05-26"
 }
 ```
 
@@ -149,8 +141,8 @@ Publikuje tekstową recenzję do wybranego filmu
 Pobiera listę recenzji napisanych przez konkretnego użytkownika
 
 * **Metoda:** `GET`
-* **Ścieżka:** `/user/{user_id}/reviews`
-* **Przykład:** `/user/1/reviews`
+* **Ścieżka:** `/reviews/user`
+* **Autoryzacja:** `Bearer Token`
 
 ### Dodaj nową ocenę
 
@@ -158,10 +150,10 @@ Wystawia ocenę numeryczną dla konkretnego filmu
 
 * **Metoda:** `POST`
 * **Ścieżka:** `/rating`
+* **Autoryzacja:** `Bearer Token`
 
 ```json
 {
-    "id_user": 1,
     "id_movie": 2,
     "rating": 10
 }
@@ -172,5 +164,5 @@ Wystawia ocenę numeryczną dla konkretnego filmu
 Zwraca oceny wystawione przez wskazanego użytkownika
 
 * **Metoda:** `GET`
-* **Ścieżka:** `/user/{user_id}/ratings`
-* **Przykład:** `/user/1/ratings`
+* **Ścieżka:** `/ratings/user`
+* **Autoryzacja:** `Bearer Token`

@@ -91,12 +91,7 @@ def read_root():
 
 # USER
 
-@router.get("/users")
-def get_users(db: Session = Depends(get_db)):
-    users = db.query(models.User).all()
-    return users
-
-@router.get("/user/me", response_model=structure.UserRespone)
+@router.get("/user/me", response_model=structure.UserResponeSchema)
 async def get_me(current_user: models.User = Depends(get_current_user)):
     return current_user
 
@@ -105,7 +100,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     user = get_user_by_ID(id, db)
 
 @router.put("/user")
-def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Session = Depends(get_db)):
+def put_new_data_user(data: structure.UserResponeSchema, response: Response, db: Session = Depends(get_db)):
     user = get_user_by_ID(data.id_user, db)
 
     if data.birthdate:
@@ -127,24 +122,28 @@ def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Se
     response.status_code = status.HTTP_204_NO_CONTENT
     return {"message": "Updated user data"}
 
-@router.post("/register", response_model=structure.UserRespone, status_code=status.HTTP_201_CREATED)
-async def register(user_data: structure.Register, response: Response, db: Session = Depends(get_db)):
+@router.post("/register", response_model=structure.CreateAccountSchema, status_code=201)
+async def register(user_data: structure.UserResponeSchema, db: Session = Depends(get_db)):
     email = db.query(models.User).filter(models.User.email == user_data.email).first()
+    nickname = db.query(models.User).filter(models.User.nickname == user_data.nickname).first()
 
-    if email:
-        raise HTTPException(status_code=400, detail=f"User with email: {user_data.email} already exist")
+    if email or nickname:
+        field = "email" if email else "nickname"
+        value = user_data.email if email else user_data.nickname
+        raise HTTPException(status_code=400, detail=f"User with {field}: {value} already exist")
+    
     
     hashed_password = get_password_hash(user_data.password)
 
     create_account = models.User(email=user_data.email, nickname=user_data.nickname, password=hashed_password)
     db.add(create_account)
     db.commit()
+    db.refresh(create_account)
 
-    response.status_code = status.HTTP_201_CREATED
-    return {"email": user_data.email, "nickname": user_data.nickname }
+    return create_account
 
 @router.post("/login")
-async def login(data: structure.Login, db: Session = Depends(get_db)):
+async def login(data: structure.LoginSchema, db: Session = Depends(get_db)):
     user = get_user_by_nickname(data.nickname, db)
 
     if not verify_password(data.password, user.password):
@@ -177,76 +176,65 @@ def get_movie_by_id(id: int, db: Session = Depends(get_db)):
 
 # FAVORITES
 
-@router.post("/favorite")
-def post_movie_to_user_favortie(new_favorite: structure.PutFavorites, response: Response, db: Session = Depends(get_db)):
-    user = get_user_by_ID(new_favorite.id_user, db)
+@router.post("/favorite/{id}", status_code=201)
+def post_movie_to_user_favortie(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     
-    movie_exists = db.query(models.Movie).filter(models.Movie.id_movie == new_favorite.id_movie).first()
+    movie_exists = db.query(models.Movie).filter(models.Movie.id_movie == id).first()
     if not movie_exists:
-        raise HTTPException(status_code=404, detail=f"Movie with ID {new_favorite.id_movie} does not exist")
+        raise HTTPException(status_code=404, detail=f"Movie with ID {id} does not exist")
 
-    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == new_favorite.id_user, models.Favorite.id_movie == new_favorite.id_movie).first()
+    check_existence = db.query(models.Favorite).filter(models.Favorite.id_user == current_user.id_user, models.Favorite.id_movie == id).first()
     
     if check_existence:
         raise HTTPException(status_code=409, detail="This movie was already add to favortie")
     
-    movie_to_favorites = models.Favorite(id_user=new_favorite.id_user, id_movie=new_favorite.id_movie)
+    movie_to_favorites = models.Favorite(id_user=current_user.id_user, id_movie=id)
     db.add(movie_to_favorites)
     db.commit()
 
-    response.status_code = status.HTTP_201_CREATED
     return{"message": "Movie added to favorties"}
 
-# DELETE TYMCZASOWE BO BEZ JWT
-
-@router.delete("/favorite/{id}")
-def delete_movie_from_favorite(id: int, user_id: int, db: Session = Depends(get_db)):
-    delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id).first()
+@router.delete("/favorite/delete/{id}", status_code=204)
+def delete_movie_from_favorite(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id, models.Favorite.id_user == current_user.id_user).first()
 
     if not delete_favorite:
         raise HTTPException(status_code=404, detail="Favortie movies not found to delete")
-    
-    if delete_favorite.id_user != user_id:
-        raise HTTPException(status_code=403, detail="You cannot delete this movie from favorite")
     
     db.delete(delete_favorite)
     db.commit()
     return {"message": "Deleted movie from favorite"}
 
-@router.get("/user/{id}/favorites", response_model=structure.FavoriteResponseSchema)
-def get_user_favortie(id: int, db: Session = Depends(get_db)):
-    favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == id).first()
+@router.get("/favorites/user", response_model=structure.FavoriteResponseSchema)
+def get_user_favortie_movies(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    favorites = db.query(models.User).options(joinedload(models.User.favorite)).filter(models.User.id_user == current_user.id_user).first()
     
     if not favorites:
         raise HTTPException(status_code=404, detail="Favortie movies not found")
     
     return favorites
 
+
 # REVIEW
 
-@router.post("/review")
-def post_review(new_review: structure.PutReview, response: Response, db: Session = Depends(get_db)):
-    get_user_by_ID(new_review.id_user, db)
-
+@router.post("/review", status_code=201)
+def post_review(new_review: structure.CreateNewReviewSchema, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     get_movie(new_review.id_movie, db)
 
-    check_existence = db.query(models.Review).filter(models.Review.id_user == new_review.id_user, models.Review.id_movie == new_review.id_movie).first()
+    check_existence = db.query(models.Review).filter(models.Review.id_user == current_user.id_user, models.Review.id_movie == new_review.id_movie).first()
     
     if check_existence:
         raise HTTPException(status_code=409, detail="This user already create review for this movie")
     
-    create_review = models.Review(id_user=new_review.id_user, id_movie=new_review.id_movie, text=new_review.text, created_at=new_review.created_at)
+    create_review = models.Review(id_user=current_user.id_user, id_movie=new_review.id_movie, text=new_review.text, created_at=datetime.now(timezone.utc))
     db.add(create_review)
     db.commit()
 
-    response.status_code = status.HTTP_201_CREATED
     return{"message": "New review added to review"}
 
-@router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
-def get_user_review(id: int, db: Session = Depends(get_db)):
-    get_user_by_ID(id, db)
-
-    reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()
+@router.get("/reviews/user", response_model=structure.UserReviewsResponseSchema)
+def get_user_review(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == current_user.id_user).first()
     
     if not reviews:
         raise HTTPException(status_code=404, detail="Reviews movies not found")
@@ -256,29 +244,24 @@ def get_user_review(id: int, db: Session = Depends(get_db)):
 
 # RATING
 
-@router.post("/rating")
-def post_rating(new_rating: structure.PutRating, response: Response, db: Session = Depends(get_db)):
-    get_user_by_ID(new_rating.id_user, db)
-
+@router.post("/rating", status_code=201)
+def post_rating(new_rating: structure.CreateRatingSchema, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     get_movie(new_rating.id_movie, db)
 
-    check_existence = db.query(models.Rating).filter(models.Rating.id_user == new_rating.id_user, models.Rating.id_movie == new_rating.id_movie).first()
+    check_existence = db.query(models.Rating).filter(models.Rating.id_user == current_user.id_user, models.Rating.id_movie == new_rating.id_movie).first()
     
     if check_existence:
         raise HTTPException(status_code=409, detail="This user already set rate for this movie")
     
-    create_rating = models.Rating(id_user=new_rating.id_user, id_movie=new_rating.id_movie, rating=new_rating.rating)
+    create_rating = models.Rating(id_user=current_user.id_user, id_movie=new_rating.id_movie, rating=new_rating.rating)
     db.add(create_rating)
     db.commit()
 
-    response.status_code = status.HTTP_201_CREATED
     return{"message": "New rate added to rating"}
 
-@router.get("/user/{id}/ratings", response_model=structure.UserRatingResponseSchema)
-def get_user_rating(id: int, db: Session = Depends(get_db)):
-    get_user_by_ID(id, db)
-
-    rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == id).first()
+@router.get("/ratings/user", response_model=structure.UserRatingResponseSchema)
+def get_user_rating(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == current_user.id_user).first()
     
     if not rating:
         raise HTTPException(status_code=404, detail="Reviews movies not found")
