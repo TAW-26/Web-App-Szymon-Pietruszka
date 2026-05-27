@@ -114,8 +114,7 @@ Usuwa film z listy ulubionych użytkownika
 
 * **Metoda:** `DELETE`
 * **Ścieżka:** `/favorite/{movie_id}`
-* **Parametry Query:** `user_id`
-* **Przykład żądania:** `/favorite/2?user_id=2`
+* **Autoryzacja:** `Bearer Token`
 
 ### Pobierz ulubione filmy użytkownika
 

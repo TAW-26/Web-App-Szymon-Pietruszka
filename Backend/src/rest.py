@@ -197,17 +197,12 @@ def post_movie_to_user_favortie(new_favorite: structure.PutFavorites, response: 
     response.status_code = status.HTTP_201_CREATED
     return{"message": "Movie added to favorties"}
 
-# DELETE TYMCZASOWE BO BEZ JWT
-
-@router.delete("/favorite/{id}")
-def delete_movie_from_favorite(id: int, user_id: int, db: Session = Depends(get_db)):
-    delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id).first()
+@router.delete("/favorite/{id}", status_code=204)
+def delete_movie_from_favorite(id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    delete_favorite = db.query(models.Favorite).filter(models.Favorite.id_movie == id, models.Favorite.id_user == current_user.id_user).first()
 
     if not delete_favorite:
         raise HTTPException(status_code=404, detail="Favortie movies not found to delete")
-    
-    if delete_favorite.id_user != user_id:
-        raise HTTPException(status_code=403, detail="You cannot delete this movie from favorite")
     
     db.delete(delete_favorite)
     db.commit()
@@ -221,6 +216,7 @@ def get_user_favortie(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Favortie movies not found")
     
     return favorites
+
 
 # REVIEW
 
