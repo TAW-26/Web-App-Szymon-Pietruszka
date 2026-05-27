@@ -130,6 +130,7 @@ class Register(BaseModel):
 class UserRespone(BaseModel):
     email: str
     nickname: str
+    password: str
 
     class Config:
         from_attributes = True

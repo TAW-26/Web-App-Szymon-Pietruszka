@@ -19,7 +19,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 models.Base.metadata.create_all(bind=engine)
 
-def get_user(ID: int, db: Session):
+
+# FUNKCJE
+
+def get_user_by_ID(ID: int, db: Session):
     user = db.query(models.User).filter(models.User.id_user == ID).first()   
 
     if not user:
@@ -35,13 +38,25 @@ def get_user_by_nickname(nickname: str, db: Session):
     
     return user
 
-def get_movie(ID: int, db: Session):
-    movie = db.query(models.Movie).filter(models.Movie.id_movie == ID).first()   
+def get_user_by_email(email: str, db: Session):
+    return db.query(models.User).filter(models.User.email == email).first()   
 
-    if not movie:
-        raise HTTPException(status_code=404, detail=f"Movie with ID {ID} does not exist")
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(status_code=401, detail="Wrong email")
+        
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Wrong JWT")
+        
+    user = get_user_by_email(email, db) 
+
+    if user is None:
+        raise HTTPException(status_code=401, detail="User dosent exist")
     
-    return movie
+    return user
 
 def get_password_hash(password: str):
     return pwd_context.hash(password)
@@ -56,6 +71,18 @@ def create_JWT(data: dict, expires_delta: timedelta | None = None):
 
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
+def get_movie(ID: int, db: Session):
+    movie = db.query(models.Movie).filter(models.Movie.id_movie == ID).first()   
+
+    if not movie:
+        raise HTTPException(status_code=404, detail=f"Movie with ID {ID} does not exist")
+    
+    return movie
+
+
+
+
+# ENDPOINTY
 
 @router.get("/")
 def read_root():
@@ -69,13 +96,17 @@ def get_users(db: Session = Depends(get_db)):
     users = db.query(models.User).all()
     return users
 
+@router.get("/user/me", response_model=structure.UserRespone)
+async def get_me(current_user: models.User = Depends(get_current_user)):
+    return current_user
+
 @router.get("/user/{id}")
-def get_user_by_id(id: int, db: Session = Depends(get_db)):
-    user = get_user(id, db)
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = get_user_by_ID(id, db)
 
 @router.put("/user")
 def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Session = Depends(get_db)):
-    user = get_user(data.id_user, db)
+    user = get_user_by_ID(data.id_user, db)
 
     if data.birthdate:
         user.birthdate = data.birthdate
@@ -124,9 +155,6 @@ async def login(data: structure.Login, db: Session = Depends(get_db)):
 
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/users/me", response_model=structure.UserRespone)
-async def get_me(current_user: dict = Depends(structure.UserRespone)):
-    return current_user
 
 # MOVIE
 
@@ -151,7 +179,7 @@ def get_movie_by_id(id: int, db: Session = Depends(get_db)):
 
 @router.post("/favorite")
 def post_movie_to_user_favortie(new_favorite: structure.PutFavorites, response: Response, db: Session = Depends(get_db)):
-    user = get_user(new_favorite.id_user, db)
+    user = get_user_by_ID(new_favorite.id_user, db)
     
     movie_exists = db.query(models.Movie).filter(models.Movie.id_movie == new_favorite.id_movie).first()
     if not movie_exists:
@@ -198,7 +226,7 @@ def get_user_favortie(id: int, db: Session = Depends(get_db)):
 
 @router.post("/review")
 def post_review(new_review: structure.PutReview, response: Response, db: Session = Depends(get_db)):
-    get_user(new_review.id_user, db)
+    get_user_by_ID(new_review.id_user, db)
 
     get_movie(new_review.id_movie, db)
 
@@ -216,7 +244,7 @@ def post_review(new_review: structure.PutReview, response: Response, db: Session
 
 @router.get("/user/{id}/reviews", response_model=structure.UserReviewsResponseSchema)
 def get_user_review(id: int, db: Session = Depends(get_db)):
-    get_user(id, db)
+    get_user_by_ID(id, db)
 
     reviews = db.query(models.User).options(joinedload(models.User.review).joinedload(models.Review.movie_data)).filter(models.User.id_user == id).first()
     
@@ -230,7 +258,7 @@ def get_user_review(id: int, db: Session = Depends(get_db)):
 
 @router.post("/rating")
 def post_rating(new_rating: structure.PutRating, response: Response, db: Session = Depends(get_db)):
-    get_user(new_rating.id_user, db)
+    get_user_by_ID(new_rating.id_user, db)
 
     get_movie(new_rating.id_movie, db)
 
@@ -248,7 +276,7 @@ def post_rating(new_rating: structure.PutRating, response: Response, db: Session
 
 @router.get("/user/{id}/ratings", response_model=structure.UserRatingResponseSchema)
 def get_user_rating(id: int, db: Session = Depends(get_db)):
-    get_user(id, db)
+    get_user_by_ID(id, db)
 
     rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == id).first()
     
