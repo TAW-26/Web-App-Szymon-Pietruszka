@@ -123,13 +123,13 @@ class PutNewDataUser(BaseModel):
     password: Optional[str] = None
 
 class Register(BaseModel):
+    email: str
     nickname: str
-    email: EmailStr
     password: str
 
 class UserRespone(BaseModel):
+    email: str
     nickname: str
-    email: EmailStr
 
     class Config:
         from_attributes = True

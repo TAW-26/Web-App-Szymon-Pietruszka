@@ -88,11 +88,11 @@ def put_new_data_user(data: structure.PutNewDataUser, response: Response, db: Se
     response.status_code = status.HTTP_204_NO_CONTENT
     return {"message": "Updated user data"}
 
-@router.post("/register", response_model=structure.Register, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=structure.UserRespone, status_code=status.HTTP_201_CREATED)
 async def register(user_data: structure.Register, response: Response, db: Session = Depends(get_db)):
     email = db.query(models.User).filter(models.User.email == user_data.email).first()
 
-    if not email:
+    if email:
         raise HTTPException(status_code=400, detail=f"User with email: {user_data.email} already exist")
     
     hashed_password = get_password_hash(user_data.password)
@@ -115,6 +115,10 @@ async def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     access_token = create_JWT(data={"sub": user.email}, expires_delta=access_token_expires)
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/users/me", response_model=structure.UserRespone)
+async def get_me(current_user: dict = Depends(structure.UserRespone)):
+    return current_user
 
 # MOVIE
 
