@@ -12,7 +12,7 @@ Aplikacja będzie również umożliwiała przeglądanie listy filmów, wyszukiwa
 
 ---
 
-![Postman](./POSTMAN.png)
+![Postman](./postman.png)
 
 
 ## Autentykacja i Użytkownicy
@@ -164,5 +164,5 @@ Wystawia ocenę numeryczną dla konkretnego filmu
 Zwraca oceny wystawione przez wskazanego użytkownika
 
 * **Metoda:** `GET`
-* **Ścieżka:** `/user/{user_id}/ratings`
-* **Przykład:** `/user/1/ratings`
+* **Ścieżka:** `/ratings/user`
+* **Autoryzacja:** `Bearer Token`

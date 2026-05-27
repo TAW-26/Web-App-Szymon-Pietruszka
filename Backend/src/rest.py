@@ -259,11 +259,9 @@ def post_rating(new_rating: structure.CreateRatingSchema, db: Session = Depends(
 
     return{"message": "New rate added to rating"}
 
-@router.get("/user/{id}/ratings", response_model=structure.UserRatingResponseSchema)
-def get_user_rating(id: int, db: Session = Depends(get_db)):
-    get_user_by_ID(id, db)
-
-    rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == id).first()
+@router.get("/ratings/user", response_model=structure.UserRatingResponseSchema)
+def get_user_rating(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    rating = db.query(models.User).options(joinedload(models.User.ratings).joinedload(models.Rating.movie_data)).filter(models.User.id_user == current_user.id_user).first()
     
     if not rating:
         raise HTTPException(status_code=404, detail="Reviews movies not found")
