@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, field_validator, Field
+from pydantic import BaseModel, field_validator, Field, EmailStr
 from datetime import date
 from typing import Optional
 
@@ -121,3 +121,15 @@ class PutNewDataUser(BaseModel):
     birthdate: Optional[date] = None
     gender: Optional[str] = None
     password: Optional[str] = None
+
+class Register(BaseModel):
+    nickname: str
+    email: EmailStr
+    password: str
+
+class UserRespone(BaseModel):
+    nickname: str
+    email: EmailStr
+
+    class Config:
+        from_attributes = True
