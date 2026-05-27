@@ -116,9 +116,8 @@ Usuwa film z listy ulubionych użytkownika
 Zwraca listę wszystkich filmów oznaczonych jako ulubione przez konkretnego użytkownika
 
 * **Metoda:** `GET`
-* **Ścieżka:** `/user/{user_id}/favorites`
-* **Przykład:** `/user/1/favorites`
-
+* **Ścieżka:** `/favorites/user`
+* **Autoryzacja:** `Bearer Token`
 
 ## Recenzje i Oceny
 

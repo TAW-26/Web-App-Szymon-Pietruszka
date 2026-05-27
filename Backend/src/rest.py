@@ -91,11 +91,6 @@ def read_root():
 
 # USER
 
-@router.get("/users")
-def get_users(db: Session = Depends(get_db)):
-    users = db.query(models.User).all()
-    return users
-
 @router.get("/user/me", response_model=structure.UserRespone)
 async def get_me(current_user: models.User = Depends(get_current_user)):
     return current_user
