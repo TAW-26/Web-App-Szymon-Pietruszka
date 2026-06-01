@@ -55,7 +55,7 @@ Przedstawia strukturę bazy danych aplikacji. System przechowuje informacje o fi
 
 Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych. Użytkownik niezalogowany może się rejestrować i przeglądać filmy, natomiast zalogowany korzysta z pełnych funkcji systemu, takich jak ocenianie, recenzowanie, polubienie filmu oraz przeglądanie proponowanych dla użytkownika filmów. Backend odpowiada za wykonywanie algorytmów oraz automatyczne aktualizowanie ocen filmów.
 
-![Diagram Przypadków Użycia](./doc/img//DPU.png)
+![Diagram Przypadków Użycia](./Doc/img//DPU.png)
 
 
 ## Dokumentacja
