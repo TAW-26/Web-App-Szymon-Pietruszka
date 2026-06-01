@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS MovieCheck.movie (
 	poster VARCHAR(255), -- NOT NULL jak na razie bez
 	production VARCHAR(255) NOT NULL,
 	year SMALLINT NOT NULL,
-	rating NUMERIC(3,2) DEFAULT 0.00
+	rating NUMERIC(4,2) DEFAULT 0.00
 );
 
 
@@ -119,75 +119,24 @@ CREATE TABLE IF NOT EXISTS MovieCheck.rating (
 
 
 -- TRIGGER RATING UPDATE --
+DROP TRIGGER IF EXISTS trigger_update_movie_rating ON MovieCheck.rating;
+
 CREATE OR REPLACE FUNCTION update_rating()
 RETURNS TRIGGER AS $$
 BEGIN
-    UPDATE movie
+    UPDATE MovieCheck.movie
     SET rating = (
-        SELECT COALESCE(ROUND(AVG(rating), 2), 0)
+        SELECT COALESCE(ROUND(AVG(rating), 1), 0)
         FROM MovieCheck.rating
-        WHERE id_movie = COALESCE(NEW.id_movie, OLD.id_movie)
+        WHERE id_movie = NEW.id_movie
     )
-    WHERE movie.id_movie = COALESCE(NEW.id_movie, OLD.id_movie);
+    WHERE movie.id_movie = NEW.id_movie;
     
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-
--- EXAMPLES DATA --
-INSERT INTO MovieCheck.user (nickname, name, email, password, birthdate, gender) VALUES
-	('JohnySilverhand', 'Jan Kowalski', 'js@example.com', 'password', '1995-04-12', 'Mężczyzna');
-
-INSERT INTO MovieCheck.movie (title, description, director, composer, production, year) VALUES 
-	('Piraci z Karaibów: Klątwa Czarnej Perły', 'opis', 'Gore Verbinski', 'Hans Zimmer', 'Jerry Bruckheimer', 2003),
-	('Interstellar', 'opis', 'Christopher Nolan', 'Hans Zimmer', 'Emma Thomas, Christopher Nolan, Lynda Obst', 2014)
-
-INSERT INTO MovieCheck.actors (name) VALUES
-	('Johnny Depp'),
-	('Orlando Bloom'),
-	('Keira Knightley'),
-	('Geoffrey Rush'),
-	('Jack Davenport'),
-	('Jonathan Pryce'),
-	('Matthew McConaughey'),
-	('Anne Hathaway'),
-	('Jessica Chastain'),
-	('Mackenzie Foy'),
-	('Michael Caine'),
-	('Matt Damon');
-
-INSERT INTO MovieCheck.movie_actors (id_movie, id_actor) VALUES
-	(1, 1),
-	(1, 2),
-	(1, 3),
-	(1, 4),
-	(1, 5),
-	(1, 6),
-	
-	(2, 7),
-	(2, 8),
-	(2, 9),
-	(2, 10),
-	(2, 11),
-	(2, 12);
-
-INSERT INTO moviecheck.genre (name) 
-VALUES 
-    ('Adventure'),
-    ('Action'),
-    ('Thriler'),
-    ('Science-fiction'),
-    ('Fantasy');
-
-INSERT INTO moviecheck.movie_genre (id_movie, id_genre)
-SELECT 1, id_genre 
-FROM moviecheck.genre 
-WHERE name IN ('Fantasy', 'Adventure');
-
-INSERT INTO moviecheck.movie_genre (id_movie, id_genre)
-SELECT 2, id_genre 
-FROM moviecheck.genre 
-WHERE name IN ('Science-fiction');
+CREATE TRIGGER trigger_update_movie_rating
+AFTER INSERT OR UPDATE ON MovieCheck.rating
+FOR EACH ROW
+EXECUTE FUNCTION update_rating();
