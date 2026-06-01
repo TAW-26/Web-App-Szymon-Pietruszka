@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { Api } from './api';
+import { MessageConnect } from './message-connect';
 
-describe('Api', () => {
-  let service: Api;
+describe('MessageConnect', () => {
+  let service: MessageConnect;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Api);
+    service = TestBed.inject(MessageConnect);
   });
 
   it('should be created', () => {

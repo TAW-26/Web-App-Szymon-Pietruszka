@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 import { config } from '../config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ApiService {
+export class MessageConnect {
   private apiUrl = `${config.url}/`
 
   constructor(private http: HttpClient) {}

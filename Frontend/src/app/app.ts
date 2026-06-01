@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ApiService } from './services/api';
+import { MessageConnect } from './services/message-connect';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,10 +11,10 @@ import { CommonModule } from '@angular/common';
 })
 export class App implements OnInit{
   backendMessage: string = "load"
-  constructor(private APIservice: ApiService, private cdr: ChangeDetectorRef) {}
+  constructor(private messageConnect: MessageConnect, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.APIservice.getMessage().subscribe({
+    this.messageConnect.getMessage().subscribe({
       next: (data) => {
         this.backendMessage = data.message; 
         this.cdr.detectChanges();
