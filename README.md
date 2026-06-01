@@ -59,4 +59,4 @@ Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych.
 
 
 ## Dokumentacja
-Po więcej szczegółowych informacji dotyczącej aplikacji można przeczytać w [dokumentacji projektu](./docs/topic-selection.md).
+Po więcej szczegółowych informacji dotyczącej aplikacji można przeczytać w [dokumentacji projektu](./Doc/TOPIC.md).
