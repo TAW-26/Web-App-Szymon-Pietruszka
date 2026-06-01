@@ -12,7 +12,7 @@ Aplikacja będzie również umożliwiała przeglądanie listy filmów, wyszukiwa
 
 ---
 
-![Postman](./postman.png)
+![Postman](./img/postman.png)
 
 
 ## Autentykacja i Użytkownicy
