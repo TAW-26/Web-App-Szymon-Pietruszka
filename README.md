@@ -49,13 +49,13 @@ Serwer jest dostępny pod adresem: http://localhost:8000
 ## Diagram ERD
 Przedstawia strukturę bazy danych aplikacji. System przechowuje informacje o filmach, użytkownikach, aktorach, gatunkach, ocenach, recenzjach, polubionych filmach oraz relacjach między nimi.
 
-![ERD](./docs/ERD.png)
+![ERD](./Doc/img/ERD.png)
 
 ## Diagram Przypadków Użycia
 
 Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych. Użytkownik niezalogowany może się rejestrować i przeglądać filmy, natomiast zalogowany korzysta z pełnych funkcji systemu, takich jak ocenianie, recenzowanie, polubienie filmu oraz przeglądanie proponowanych dla użytkownika filmów. Backend odpowiada za wykonywanie algorytmów oraz automatyczne aktualizowanie ocen filmów.
 
-![Diagram Przypadków Użycia](./docs/DPU.png)
+![Diagram Przypadków Użycia](./doc/img//DPU.png)
 
 
 ## Dokumentacja
