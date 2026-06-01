@@ -23,21 +23,21 @@ Aplikacja będzie zawierać 1 główny widok dostępny dla kazdego, który będz
 - **Ulubione**
 
 
-## Odkrywaj (Widok Główny)
+### **Odkrywaj (Widok Główny)**
 Główny pulpit aplikacji, służący do przeglądania i wyszukiwania zawartości bazy danych. Domyślna lista filmów jest automatycznie sortowana na podstawie średniej oceny – od najwyższej do najniższej. Dynamiczny pasek wyszukiwania (Search Bar) filtrujący tytuły filmów w czasie rzeczywistym.
 
 
-## Logowanie/Rejestracja
+### **Logowanie/Rejestracja**
 Prosty widok logowania/rejstracji zawierający pola takie jak: email, hasło.
 
 
-## Konto
+### **Konto**
 Sekcja dedykowana zarządzaniu danymi zalogowanego użytkownika. Możliwość edycji danych oraz aktualizacji informacji
 
 
-## Aktywność
+### **Aktywność**
 Centrum histori interakcji użytkownika z bazą danych. Wyśweitlana będzie lista filmów, którym użytkownik wystawił oceny lub napisał recenzje
 
 
-## Ulubione
+### **Ulubione**
 Spersonalizowana lista ulubionych filmów użytkownika. Możliwość  usunięcia filmu z listy ulubionych
