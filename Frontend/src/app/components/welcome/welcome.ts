@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { APIConnect } from '../services/api-connect';
+import { APIConnect } from '../../database/services/api-connect';
 
 @Component({
   selector: 'app-welcome',
