@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, OnInit, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ApiConnect } from '../../services/api-connect';
 
 @Component({
   selector: 'app-start',
   standalone: true,
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './start.html',
   styleUrl: './start.scss',
 })
