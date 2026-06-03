@@ -1,3 +1,13 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+
+# Editors
+.vscode/
+.idea/
+
 # Compiled output
 /dist
 /tmp
@@ -5,7 +15,7 @@
 /bazel-out
 
 # Node
-/node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -18,11 +28,8 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
-# Visual Studio Code
-.vscode/
-
 # Miscellaneous
-/.angular
+.angular/
 .sass-cache/
 /connect.lock
 /coverage
