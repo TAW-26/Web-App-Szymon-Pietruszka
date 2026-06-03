@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MovieResponse } from '../../services/models/data.models';
-import { ApiConnect } from '../../services/api-connect';
+import { ApiConnect } from '../../services/API/api-connect';
 
 @Component({
   selector: 'app-movies',

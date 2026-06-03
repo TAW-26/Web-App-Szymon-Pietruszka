@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { config } from './config/config';
+import { config } from '../config/config';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MovieResponse } from './models/data.models';
+import { MovieResponse } from '../models/data.models';
 
 @Injectable({
   providedIn: 'root',
