@@ -8,16 +8,31 @@ interface LoginResponse {
   token_type: string;
 }
 
+interface RegisterResponse {
+  access_token: string;
+  token_type: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/login';
+  private apiUrl = 'http://localhost:8000';
+  private urlLogin = '/login'
+  private urlRegister = '/register'
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   login(nickname: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl, { nickname, password }).pipe(
+    return this.http.post<LoginResponse>(this.apiUrl + this.urlLogin, { nickname, password }).pipe(
+      tap(response => {
+        this.cookieService.set('access_token', response.access_token, 1, '/');
+      })
+    );
+  }
+
+  register(email: string, nickname: string, password: string): Observable<LoginResponse> {
+    return this.http.post<RegisterResponse>(this.apiUrl + this.urlRegister, { nickname, password, email }).pipe(
       tap(response => {
         this.cookieService.set('access_token', response.access_token, 1, '/');
       })
