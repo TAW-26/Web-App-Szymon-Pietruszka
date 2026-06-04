@@ -12,10 +12,7 @@ import { forkJoin } from 'rxjs';
 export class Activity implements OnInit {
   public activities: ActivityItem[] = []
 
-  constructor(
-    private authService: AuthService, 
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadUserActivity();
