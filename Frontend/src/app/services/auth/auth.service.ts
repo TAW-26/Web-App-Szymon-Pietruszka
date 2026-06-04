@@ -106,6 +106,10 @@ export class AuthService {
     this.loggedIn.next(false);
   }
 
+  loginSuccess(): void {
+    this.loggedIn.next(true);
+  }
+
   get isLoggedIn$() {
     return this.loggedIn.asObservable();
   }

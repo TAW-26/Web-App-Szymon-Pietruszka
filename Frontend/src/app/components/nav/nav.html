@@ -2,10 +2,10 @@
   <a routerLink="/" class="nav-logo"></a>
   <ul class="nav-links">
     <li><a routerLink="/discover">Odkrywaj</a></li>
-    <li><a routerLink="/activity">Aktywność</a></li>
-    <li><a routerLink="/favorite">Ulubione</a></li>
-    <li><a routerLink="/account">Konto</a></li>
-    <li><a routerLink="/" (click)="onLogout(); $event.preventDefault()">Wyloguj się</a></li>
+    <li><a routerLink="/activity" *ngIf="authService.isLoggedIn$ | async">Aktywność</a></li>
+    <li><a routerLink="/favorite" *ngIf="authService.isLoggedIn$ | async">Ulubione</a></li>
+    <li><a routerLink="/account" *ngIf="authService.isLoggedIn$ | async">Konto</a></li>
+    <li><a routerLink="/" *ngIf="authService.isLoggedIn$ | async" (click)="onLogout(); $event.preventDefault()">Wyloguj się</a></li>
     <li><a routerLink="/login-register">Zaloguj</a></li>
   </ul>
 </nav>
