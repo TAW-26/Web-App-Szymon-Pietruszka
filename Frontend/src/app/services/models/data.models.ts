@@ -32,3 +32,8 @@ export interface TokenResponse {
   access_token: string;
   token_type: string;
 }
+
+export interface UserFavoritesResponse {
+  id_user: number;
+  favorite: MovieResponse[]
+}

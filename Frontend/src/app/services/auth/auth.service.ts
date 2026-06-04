@@ -12,6 +12,7 @@ export class AuthService {
   private urlLogin = '/login'
   private urlRegister = '/register'
   private urlUser = '/user/me'
+  private urlFavorites = '/favorites/user'
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
@@ -31,14 +32,22 @@ export class AuthService {
     );
   }
 
-  getUserData(): Observable<any> {
+  getData(fullURL: string): Observable<any> {
     const token = this.cookieService.get('access_token');
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<any>(this.apiUrl + this.urlUser, { headers });
+    return this.http.get<any>(fullURL, { headers });
+  }
+
+  getUserData(): Observable<any> {
+    return this.getData(this.apiUrl + this.urlUser)
+  }
+
+  getUserFavorites(): Observable<any> {
+    return this.getData(this.apiUrl + this.urlFavorites)
   }
 
   getToken(): string {

@@ -1,0 +1,69 @@
+<div class="favorites-container">
+  <h2>Moje Ulubione Filmy</h2>
+
+  @if (userFavorites) {
+    
+    <div class="movies-grid">
+      
+      @for (movie of userFavorites.favorite; track movie.id_movie) {
+        
+        <div class="movie-card">
+          
+          <div class="movie-poster">
+            <span class="movie-rating">{{ movie.rating }}</span>
+          </div>
+
+          <div class="movie-info">
+            <h3>{{ movie.title }} <span class="year">({{ movie.year }})</span></h3>
+            <p class="description">{{ movie.description }}</p>
+            
+            <div class="meta-data">
+              <p><strong>Reżyser:</strong> {{ movie.director }}</p>
+              <p><strong>Muzyka:</strong> {{ movie.composer }}</p>
+              <p><strong>Produkcja:</strong> {{ movie.production }}</p>
+            </div>
+
+            <div class="genres-tags">
+              @for (genre of movie.genres; track genre) {
+                <span class="genre-tag">{{ genre }}</span>
+              }
+            </div>
+
+            <div class="section-block">
+              <h4>Obsada:</h4>
+              <p class="actors-list">
+                @for (actor of movie.actors; track actor; let isLast = $last) {
+                  {{ actor }}{{ isLast ? '' : ', ' }}
+                }
+              </p>
+            </div>
+
+            <div class="section-block reviews-section">
+              <h4>Krótkie recenzje ({{ movie.reviews.length }}):</h4>
+              
+              @for (review of movie.reviews; track review.created_at) {
+                <div class="review-item">
+                  <div class="review-header">
+                    <span class="review-user">{{ review.nickname }}</span>
+                    <br>
+                    <span class="review-date">{{ review.created_at }}</span>
+                  </div>
+                  <p class="review-text">"{{ review.text }}"</p>
+                </div>
+              } @empty {
+                <p class="no-reviews">Brak recenzji dla tego filmu.</p>
+              }
+
+            </div>
+
+          </div>
+        </div>
+
+      } @empty {
+        <div class="empty-list">Nie dodałeś jeszcze żadnych filmów do ulubionych.</div>
+      }
+
+    </div>
+
+  }
+</div>
