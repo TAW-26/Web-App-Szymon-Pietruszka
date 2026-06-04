@@ -27,5 +27,5 @@
   </div>
 
 
-  <button class="favorite-btn" (click)="favortie(movie.id_movie)">Polub</button>
+  <button class="favorite-btn" (click)="favortie(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
 </div>

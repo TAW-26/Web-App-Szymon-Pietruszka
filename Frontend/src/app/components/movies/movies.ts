@@ -17,7 +17,7 @@ export class Movies {
   errorMessage: string = '';
   favoriteMessage: string = ''
 
-  constructor(private authService: AuthService, private apiService: ApiConnect, private cdr: ChangeDetectorRef) {}
+  constructor(public authService: AuthService, private apiService: ApiConnect, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.apiService.getMovies().subscribe({
