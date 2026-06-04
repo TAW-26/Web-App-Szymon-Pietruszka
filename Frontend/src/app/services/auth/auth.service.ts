@@ -15,6 +15,8 @@ export class AuthService {
   private urlFavorites = '/favorites/user'
   private urlReviews = '/reviews/user'
   private urlRatings = '/ratings/user'
+  private urlFavorite = '/favorite/'
+  private urlFavoriteDelete = '/favorite/delete/'
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
@@ -59,6 +61,33 @@ export class AuthService {
   getUserRatings(): Observable<any> {
     return this.getData(this.apiUrl + this.urlRatings)
   }
+
+
+  setFavorite(id: number): Observable<any> {
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const fullUrl = `${this.apiUrl}${this.urlFavorite}${id}`;
+
+    return this.http.post<any>(fullUrl, {}, { headers });
+  }
+
+  deleteFavorite(id: number): Observable<any> {
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const fullUrl = `${this.apiUrl}${this.urlFavoriteDelete}${id}`;
+
+    return this.http.delete<any>(fullUrl, { headers });
+  }
+
+
 
   getToken(): string {
     return this.cookieService.get('access_token');
