@@ -91,13 +91,9 @@ def read_root():
 
 # USER
 
-@router.get("/user/me", response_model=structure.UserResponeSchema)
-async def get_me(current_user: models.User = Depends(get_current_user)):
+@router.get("/user/me", response_model=structure.UserDataResponeSchema)
+async def get_me(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     return current_user
-
-@router.get("/user/{id}")
-def get_user(id: int, db: Session = Depends(get_db)):
-    user = get_user_by_ID(id, db)
 
 @router.put("/user")
 def put_new_data_user(data: structure.UserResponeSchema, response: Response, db: Session = Depends(get_db)):
@@ -122,7 +118,7 @@ def put_new_data_user(data: structure.UserResponeSchema, response: Response, db:
     response.status_code = status.HTTP_204_NO_CONTENT
     return {"message": "Updated user data"}
 
-@router.post("/register", response_model=structure.CreateAccountSchema, status_code=201)
+@router.post("/register", status_code=201)
 async def register(user_data: structure.UserResponeSchema, db: Session = Depends(get_db)):
     email = db.query(models.User).filter(models.User.email == user_data.email).first()
     nickname = db.query(models.User).filter(models.User.nickname == user_data.nickname).first()
@@ -140,7 +136,10 @@ async def register(user_data: structure.UserResponeSchema, db: Session = Depends
     db.commit()
     db.refresh(create_account)
 
-    return create_account
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_JWT(data={"sub": email}, expires_delta=access_token_expires)
+
+    return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/login")
 async def login(data: structure.LoginSchema, db: Session = Depends(get_db)):

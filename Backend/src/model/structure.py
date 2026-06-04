@@ -115,7 +115,7 @@ class UpdateDataUserSchema(BaseModel):
     gender: Optional[str] = None
     password: Optional[str] = None
 
-class CreateAccountSchema(BaseModel):
+class UserResponeSchema(BaseModel):
     email: str
     nickname: str
     password: str
@@ -123,10 +123,12 @@ class CreateAccountSchema(BaseModel):
     class Config:
         from_attributes = True
 
-class UserResponeSchema(BaseModel):
-    email: str
+class UserDataResponeSchema(BaseModel):
     nickname: str
-    password: str
+    name: Optional[str] = None
+    email: str
+    birthdate: Optional[date] = None
+    gender: Optional[str] = None
 
     class Config:
         from_attributes = True

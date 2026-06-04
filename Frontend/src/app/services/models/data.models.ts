@@ -19,3 +19,21 @@ export interface MovieResponse {
   actors: string[];
   reviews: ShortReviewResponse[];
 }
+
+export interface UserDataResponse {
+  nickname: string;
+  name: string | null;
+  email: string;
+  birthdate: Date | null
+  gender: string | null
+}
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: string;
+}
+
+export interface UserFavoritesResponse {
+  id_user: number;
+  favorite: MovieResponse[]
+}

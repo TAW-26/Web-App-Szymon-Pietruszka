@@ -1,1 +1,36 @@
-<p>user.data works!</p>
+<div class="profile-wrapper">
+  <div class="profile-card">
+    
+    <div class="profile-header">
+      <h2>Witaj, {{ userData?.nickname }}</h2>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="profile-details">
+      <h3>Informacje o profilu</h3>
+
+      <div class="detail-row">
+        <p class="email-sub">email: {{ userData?.email }}</p>
+        <span class="label">Imię:</span>
+        <span class="value" [class.empty]="!userData?.name">
+          {{ userData?.name || '' }}
+        </span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Data urodzenia:</span>
+        <span class="value" [class.empty]="!userData?.birthdate">
+          {{ userData?.birthdate || '' }}
+        </span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Płeć:</span>
+        <span class="value" [class.empty]="!userData?.gender">
+          {{ userData?.gender || '' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
