@@ -91,13 +91,9 @@ def read_root():
 
 # USER
 
-@router.get("/user/me", response_model=structure.UserResponeSchema)
-async def get_me(current_user: models.User = Depends(get_current_user)):
+@router.get("/user/me", response_model=structure.UserDataResponeSchema)
+async def get_me(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     return current_user
-
-@router.get("/user/{id}")
-def get_user(id: int, db: Session = Depends(get_db)):
-    user = get_user_by_ID(id, db)
 
 @router.put("/user")
 def put_new_data_user(data: structure.UserResponeSchema, response: Response, db: Session = Depends(get_db)):

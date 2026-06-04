@@ -49,6 +49,18 @@ Pobiera szczegółowe dane aktualnie zalogowanego użytkownika na podstawie toke
 * **Ścieżka:** `/user/me`
 * **Autoryzacja:** `Bearer Token`
 
+```json
+{
+{
+    "nickname": "nick",
+    "name": "name",
+    "email": "email",
+    "birthdate": "date",
+    "gender": "gender"
+}
+}
+```
+
 ### Aktualizacja danych użytkownika
 
 Modyfikuje informacje powiązane z profilem użytkownika
@@ -59,7 +71,7 @@ Modyfikuje informacje powiązane z profilem użytkownika
 ```json
 {
     "id_user": 1,
-    "gender": "M"
+    "gender": "gender"
 }
 ```
 

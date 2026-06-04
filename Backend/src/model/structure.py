@@ -123,6 +123,16 @@ class UserResponeSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class UserDataResponeSchema(BaseModel):
+    nickname: str
+    name: Optional[str] = None
+    email: str
+    birthdate: Optional[date] = None
+    gender: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 class LoginSchema(BaseModel):
     nickname: str
     password: str
