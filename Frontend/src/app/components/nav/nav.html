@@ -5,6 +5,7 @@
     <li><a routerLink="/activity">Aktywność</a></li>
     <li><a routerLink="/favorite">Ulubione</a></li>
     <li><a routerLink="/account">Konto</a></li>
-    <li><a routerLink="/login-register">Zaloguj się</a></li>
+    <li><a routerLink="/" (click)="onLogout(); $event.preventDefault()">Wyloguj się</a></li>
+    <li><a routerLink="/login-register">Zaloguj</a></li>
   </ul>
 </nav>

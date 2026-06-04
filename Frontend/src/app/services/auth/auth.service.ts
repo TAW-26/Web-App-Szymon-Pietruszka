@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { TokenResponse } from '../models/data.models';
 
@@ -18,7 +18,11 @@ export class AuthService {
   private urlFavorite = '/favorite/'
   private urlFavoriteDelete = '/favorite/delete/'
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  private loggedIn: BehaviorSubject<boolean>;
+
+  constructor(private http: HttpClient, private cookieService: CookieService) {
+    this.loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+  }
 
   login(nickname: string, password: string): Observable<TokenResponse> {
     return this.http.post<TokenResponse>(this.apiUrl + this.urlLogin, { nickname, password }).pipe(
@@ -89,15 +93,20 @@ export class AuthService {
 
 
 
+  private hasToken(): boolean {
+    return this.cookieService.check('access_token');
+  }
+
   getToken(): string {
     return this.cookieService.get('access_token');
   }
 
   logout(): void {
     this.cookieService.delete('access_token', '/');
+    this.loggedIn.next(false);
   }
 
-  isLoggedIn(): boolean {
-    return this.cookieService.check('access_token');
+  get isLoggedIn$() {
+    return this.loggedIn.asObservable();
   }
 }
