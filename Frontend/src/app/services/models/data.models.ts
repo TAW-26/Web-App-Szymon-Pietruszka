@@ -1,5 +1,4 @@
-
-export interface ShortReviewResponse {
+export interface ReviewShortResponse {
   text: string;
   created_at: string;
   nickname: string;
@@ -17,7 +16,12 @@ export interface MovieResponse {
   rating: number;
   genres: string[];
   actors: string[];
-  reviews: ShortReviewResponse[];
+  reviews: ReviewShortResponse[];
+}
+
+export interface MovieShortResponse {
+  title: string;
+  rating: number;
 }
 
 export interface UserDataResponse {
@@ -36,4 +40,33 @@ export interface TokenResponse {
 export interface UserFavoritesResponse {
   id_user: number;
   favorite: MovieResponse[]
+}
+
+export interface UserReviewsResponse {
+  id_user: number;
+  review: ReviewItem[]
+}
+
+export interface ReviewItem {
+  text: string;
+  created_at: string;
+  id_movie: MovieShortResponse;
+}
+
+export interface UserRatingItem {
+  rating: number;
+  id_movie: MovieShortResponse;
+}
+
+export interface UserRatingsResponse {
+  id_user: number;
+  ratings: UserRatingItem[];
+}
+
+export interface ActivityItem {
+  title: string;
+  movieRating: number;
+  rating: number | null;
+  text: string | null;
+  createdAt: string;
 }

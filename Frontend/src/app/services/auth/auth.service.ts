@@ -13,6 +13,8 @@ export class AuthService {
   private urlRegister = '/register'
   private urlUser = '/user/me'
   private urlFavorites = '/favorites/user'
+  private urlReviews = '/reviews/user'
+  private urlRatings = '/ratings/user'
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
@@ -48,6 +50,14 @@ export class AuthService {
 
   getUserFavorites(): Observable<any> {
     return this.getData(this.apiUrl + this.urlFavorites)
+  }
+
+  getUserReviews(): Observable<any> {
+    return this.getData(this.apiUrl + this.urlReviews)
+  }
+
+  getUserRatings(): Observable<any> {
+    return this.getData(this.apiUrl + this.urlRatings)
   }
 
   getToken(): string {
