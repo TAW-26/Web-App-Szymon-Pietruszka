@@ -115,14 +115,6 @@ class UpdateDataUserSchema(BaseModel):
     gender: Optional[str] = None
     password: Optional[str] = None
 
-class CreateAccountSchema(BaseModel):
-    email: str
-    nickname: str
-    password: str
-
-    class Config:
-        from_attributes = True
-
 class UserResponeSchema(BaseModel):
     email: str
     nickname: str

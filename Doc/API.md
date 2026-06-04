@@ -22,17 +22,10 @@ Aplikacja będzie również umożliwiała przeglądanie listy filmów, wyszukiwa
 ## Autentykacja i Użytkownicy
 
 ### Rejestracja nowego konta
-Tworzy profil nowego użytkownika w systemie.
+Tworzy profil nowego użytkownika w systemie i zwracanie tokenu dostępu
+
 * **Metoda:** `POST`
 * **Ścieżka:** `/register`
-
-```json
-{
-    "nickname": "nick",
-    "password": "password",
-    "email": "name@email.com"
-}
-```
 
 ### Logowanie
 
@@ -55,13 +48,6 @@ Pobiera szczegółowe dane aktualnie zalogowanego użytkownika na podstawie toke
 * **Metoda:** `GET`
 * **Ścieżka:** `/user/me`
 * **Autoryzacja:** `Bearer Token`
-
-### Pobierz wszystkich użytkowników
-
-Zwraca listę wszystkich zarejestrowanych użytkowników systemu
-
-* **Metoda:** `GET`
-* **Ścieżka:** `/users`
 
 ### Aktualizacja danych użytkownika
 
