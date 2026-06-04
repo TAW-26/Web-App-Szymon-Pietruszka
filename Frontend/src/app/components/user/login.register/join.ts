@@ -41,6 +41,7 @@ export class Join {
     this.authService.login(this.nickname, this.password).subscribe({
       next: (res) => {
         console.log('Login success');
+        this.authService.loginSuccess();
         this.router.navigate(['/discover']);
       },
       error: (err) => {
@@ -52,8 +53,6 @@ export class Join {
         else {
           this.errorMessage = 'Something goes wrong. I can feel it';
         }
-
-        this.cdr.detectChanges();
       }
     });
   }
@@ -77,6 +76,7 @@ export class Join {
     this.authService.register(this.email, this.nickname, this.password).subscribe({
       next: (res) => {
         console.log('Register success');
+        this.authService.loginSuccess();
         this.router.navigate(['/discover']);
       },
       error: (err) => {
@@ -91,8 +91,6 @@ export class Join {
         else {
           this.errorMessage = 'Something goes wrong. I can feel it';
         }
-
-        this.cdr.detectChanges();
       }
     });
   }

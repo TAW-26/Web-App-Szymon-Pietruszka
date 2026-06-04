@@ -1,3 +1,7 @@
+<div *ngIf="errorMessage" style="color: #ff4d4d; margin-bottom: 15px; font-size: 0.9rem;">
+  {{ errorMessage }}
+</div>
+
 <div class="card" *ngFor="let movie of movies">
   
   <p class="movie-title">{{ movie.title }}</p>
@@ -22,5 +26,6 @@
     </div>
   </div>
 
-  <button class="details-btn">Szczegóły</button>
+
+  <button class="favorite-btn" (click)="favortie(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
 </div>

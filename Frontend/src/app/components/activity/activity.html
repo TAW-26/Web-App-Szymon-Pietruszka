@@ -1,0 +1,42 @@
+<div class="activity-container">
+  <h2>Moja aktywność filmowa</h2>
+
+  <div class="activity-list">
+    @for (item of activities; track item.title) {
+      <div class="activity-card">
+        
+        <div class="card-header">
+          <h3>{{ item.title }}</h3>
+          <span class="global-rating">Średnia: {{ item.movieRating }}/10</span>
+        </div>
+
+        <div class="card-body">
+          @if (item.rating !== null) {
+            <div class="user-rating-box">
+              <span class="star-icon">★</span>
+              <span class="rating-value">Twoja ocena: <strong>{{ item.rating }}/10</strong></span>
+            </div>
+          }
+
+          @if (item.text !== null) {
+            <div class="user-review-box">
+              <p class="review-label">Twoja recenzja:</p>
+              <blockquote class="review-text">
+                "{{ item.text }}"
+              </blockquote>
+            </div>
+          }
+        </div>
+
+        <div class="card-footer">
+          <small>Dodano: {{ item.createdAt }}</small>
+        </div>
+
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>Nie dodałeś jeszcze żadnych ocen ani recenzji.</p>
+      </div>
+    }
+  </div>
+</div>
