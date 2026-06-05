@@ -11,13 +11,22 @@
 }
 
 .main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 1000;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 1rem 2rem;
-  background-color: #1a1a1a;
+  background-color: var(--color-main-dark);
+
   border-radius: 0 0 30px 30px;
-  margin: 0 3vh 0 3vh;
+  margin: 0 3vh;
 
   .nav-logo {
     width: 150px;
@@ -50,7 +59,7 @@
   }
 
   .search-bar {
-    background-color: #242424;
+    background-color: var(--color-second-dark);
     font-family: 'text';
     border: none;
     padding: 0.5vh 4vh 1vh 4vh;

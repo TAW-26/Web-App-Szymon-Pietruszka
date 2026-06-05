@@ -1,73 +1,38 @@
-<div class="auth-container" style="max-width: 400px; margin: 50px auto; padding: 30px; background: #222; color: white; border-radius: 8px;">
+<div class="auth-container">
   
   <h2>{{ isLoginMode ? 'Zaloguj się' : 'Zarejestruj się' }}</h2>
 
-  <div *ngIf="errorMessage" style="color: #ff4d4d; margin-bottom: 15px; font-size: 0.9rem;">
+  <div class="error" *ngIf="errorMessage">
     {{ errorMessage }}
   </div>
 
-  <div>
-    <div style="margin-bottom: 15px;">
-      <label style="display: block; margin-bottom: 5px;">Nickname:</label>
-      <input 
-        type="text" 
-        [(ngModel)]="nickname" 
-        autocomplete="off"
-        style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #444; background: #333; color: white;">
+  <div class="container">
+    <div class="label-conatiner">
+      <label>Nickname:</label>
+      <input type="text" [(ngModel)]="nickname" autocomplete="off"  >
     </div>
 
-    <div *ngIf="!isLoginMode" style="margin-bottom: 15px;">
-      <label style="display: block; margin-bottom: 5px;">E-mail:</label>
-      <input 
-        type="email" 
-        [(ngModel)]="email" 
-        autocomplete="email"
-        style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #444; background: #333; color: white;">
+    <div *ngIf="!isLoginMode" class="label-conatiner">
+      <label>E-mail:</label>
+      <input type="email" [(ngModel)]="email" autocomplete="email">
     </div>
 
-    <div style="margin-bottom: 20px;">
-      <label style="display: block; margin-bottom: 5px;">Hasło:</label>
-      <input 
-        type="password" 
-        [(ngModel)]="password" 
-        autocomplete="new-password"
-        style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #444; background: #333; color: white;"
-        (keydown.enter)="isLoginMode ? onLogin() : onRegister()"> 
+    <div class="label-conatiner">
+      <label>Hasło:</label>
+      <input type="password" [(ngModel)]="password" autocomplete="new-password" (keydown.enter)="isLoginMode ? onLogin() : onRegister()"> 
     </div>
 
-    <div *ngIf="!isLoginMode" style="margin-bottom: 20px;">
-      <label style="display: block; margin-bottom: 5px;">Powtórz hasło:</label>
-      <input 
-        type="password" 
-        [(ngModel)]="confirmPassword" 
-        autocomplete="new-password"
-        style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #444; background: #333; color: white;"
-        (keydown.enter)="onRegister()"> 
+    <div *ngIf="!isLoginMode" class="label-conatiner">
+      <label>Powtórz hasło:</label>
+      <input type="password" [(ngModel)]="confirmPassword" autocomplete="new-password" (keydown.enter)="onRegister()"> 
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-      <button
-        *ngIf="isLoginMode"
-        type="button"
-        (click)="onLogin()"
-        style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
-        Zaloguj się
-      </button>
+    <div class="btn-container">
+      <button *ngIf="isLoginMode" type="button" (click)="onLogin()"> Zaloguj się </button>
 
-      <button
-        *ngIf="!isLoginMode"
-        type="button"
-        (click)="onRegister()"
-        style="padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
-        Zarejestruj się
-      </button>
+      <button *ngIf="!isLoginMode" type="button" (click)="onRegister()"> Zarejestruj się </button>
 
-      <button 
-        type="button"
-        (click)="toggleMode()"
-        style="background: none; border: none; color: #007bff; cursor: pointer; text-decoration: underline; font-size: 0.9rem;">
-        {{ isLoginMode ? 'Stwórz konto' : 'Masz już konto? Zaloguj się' }}
-      </button>
+      <button class="btn-other" type="button" (click)="toggleMode()"> {{ isLoginMode ? 'Stwórz konto' : 'Masz już konto? Zaloguj się' }} </button>
     </div>
 
   </div>

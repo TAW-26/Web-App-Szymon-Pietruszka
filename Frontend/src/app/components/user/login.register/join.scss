@@ -1,0 +1,65 @@
+@mixin btn {
+  padding: 0.5vh 4vh 1vh 4vh;
+  border-radius: 6vh;
+  font-family: 'text';
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+      color: var(--font-color-text);
+  }
+}
+
+.auth-container {
+    background-color: var(--color-main-dark);
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    padding: 5vh;
+    height: fit-content;
+    border-radius: 30px;
+    color: var(--font-color-text);
+    font-family: 'text';
+
+    h2 {
+        font-family: 'title';
+        font-size: 36px;
+        margin-top: 0;
+        margin-bottom: 3vh;
+    }
+    
+    .error {
+        color: var(--color-error);
+        padding: 10px;
+    }
+
+    .label-conatiner {
+        display: flex;
+        flex-direction: column;
+
+        input {
+            background-color: var(--color-second-dark);
+            border: none;
+            border-radius: 30px;
+            padding: 1vh;
+            height: 3vh;
+            color: var(--font-color-text);
+        }
+    }
+    .btn-container {
+        display: flex;
+        gap: 2vh;
+        margin-top: 4vh;
+
+        button {
+            background-color: var(--color-main);
+            @include btn;
+        }
+
+        .btn-other {
+            background-color: var(--color-main-dark);
+            border: none;
+        }
+    }
+}

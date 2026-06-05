@@ -26,9 +26,15 @@
 
     --color-main: #56B6C6;
     --color-second: #547792;
+
+    --color-main-dark: #1a1a1a;
+    --color-second-dark: #252525;
+
+     --color-error: #ff4d4f;
 }
 
-body {
+html, body {
     background-color: var(--background-color-main);
     margin: 0;
+    height: 100vh;
 }
