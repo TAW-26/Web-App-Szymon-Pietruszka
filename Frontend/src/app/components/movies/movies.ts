@@ -1,8 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { MovieResponse } from '../../services/models/data.models';
 import { ApiConnect } from '../../services/API/api-connect';
 import { AuthService } from '../../services/auth/auth.service';
+import { Search } from '../../services/search/search';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-movies',
@@ -11,7 +15,7 @@ import { AuthService } from '../../services/auth/auth.service';
   templateUrl: './movies.html',
   styleUrl: './movies.scss',
 })
-export class Movies {
+export class Movies implements OnInit, OnDestroy{
   movies: MovieResponse[] = [];
   isLoading: boolean = true;
   errorMessage: string = '';
@@ -21,12 +25,31 @@ export class Movies {
   openedFormId: number | null = null;
   openedReviewsId: number | null = null;
   actionText: string = ''
+  private destroy$ = new Subject<void>();
 
-  constructor(public authService: AuthService, private apiService: ApiConnect, private cdr: ChangeDetectorRef) {}
+  constructor(public authService: AuthService, private apiService: ApiConnect, private cdr: ChangeDetectorRef, private http: HttpClient, private searchService: Search) {}
 
   ngOnInit(): void {
-    this.apiService.getMovies().subscribe({
+    this.searchService.getSearch().pipe(
+      tap(() => {
+        this.isLoading = true;
+        this.errorMessage = '';
+        this.cdr.detectChanges();
+      }),
+      
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((search) => {
+        if (!search.trim()) {
+          return this.apiService.getMovies();
+        }
+
+        return this.apiService.searchMovies(search);
+      }),
+
+      takeUntil(this.destroy$)).subscribe({
       next: (data) => {
+        console.log('Dane odebrane z backendu:', data);
         this.movies = data;
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -39,6 +62,11 @@ export class Movies {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   favortie(id: number) {

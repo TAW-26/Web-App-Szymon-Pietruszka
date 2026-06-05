@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { config } from '../config/config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MovieResponse } from '../models/data.models';
 
@@ -18,5 +18,10 @@ export class ApiConnect {
 
   getMovies(): Observable<MovieResponse[]> {
     return this.http.get<MovieResponse[]>(`${this.apiUrl}movies`);
+  }
+
+  searchMovies(term: string): Observable<MovieResponse[]> {
+    const params = new HttpParams().set('q', term);
+    return this.http.get<MovieResponse[]>(`${this.apiUrl}search`, { params });
   }
 }
