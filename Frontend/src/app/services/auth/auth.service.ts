@@ -17,6 +17,7 @@ export class AuthService {
   private urlRatings = '/ratings/user'
   private urlFavorite = '/favorite/'
   private urlFavoriteDelete = '/favorite/delete/'
+  private urlUserUpdateData = '/user'
 
   private loggedIn: BehaviorSubject<boolean>;
 
@@ -48,6 +49,17 @@ export class AuthService {
     });
 
     return this.http.get<any>(fullURL, { headers });
+  }
+
+  putUserData(data: any): Observable<any> {
+    const fullURL = this.apiUrl + this.urlUserUpdateData
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<any>(fullURL, data, { headers, responseType: 'text' as 'json' });
   }
 
   getUserData(): Observable<any> {
