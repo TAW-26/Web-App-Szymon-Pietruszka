@@ -2,13 +2,13 @@
   <a routerLink="/" class="nav-logo"></a>
   <ul class="nav-links">
     <li class="search-box">
-      <input type="text" [formControl]="searchControl" placeholder="Szukaj filmu..."/>
+      <input type="text" class="search-bar" [formControl]="searchControl" placeholder="Szukaj filmu..."/>
     </li>
-    <li><a routerLink="/discover">Odkrywaj</a></li>
-    <li><a routerLink="/activity" *ngIf="authService.isLoggedIn$ | async">Aktywność</a></li>
-    <li><a routerLink="/favorite" *ngIf="authService.isLoggedIn$ | async">Ulubione</a></li>
-    <li><a routerLink="/account" *ngIf="authService.isLoggedIn$ | async">Konto</a></li>
-    <li><a routerLink="/" *ngIf="authService.isLoggedIn$ | async" (click)="onLogout(); $event.preventDefault()">Wyloguj się</a></li>
-    <li><a routerLink="/login-register">Zaloguj</a></li>
+    <li><a routerLink="/discover" class="link">Odkrywaj</a></li>
+    <li><a routerLink="/activity" class="link" *ngIf="authService.isLoggedIn$ | async">Aktywność</a></li>
+    <li><a routerLink="/favorite" class="link" *ngIf="authService.isLoggedIn$ | async">Ulubione</a></li>
+    <li><a routerLink="/account" class="link" *ngIf="authService.isLoggedIn$ | async">Konto</a></li>
+    <li><a routerLink="/" class="btn-logout" *ngIf="authService.isLoggedIn$ | async" (click)="onLogout(); $event.preventDefault()">Wyloguj się</a></li>
+    <li><a routerLink="/login-register" class="btn-login">Zaloguj</a></li>
   </ul>
 </nav>

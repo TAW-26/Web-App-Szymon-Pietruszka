@@ -4,7 +4,8 @@
   align-items: center;
   padding: 1rem 2rem;
   background-color: #1a1a1a;
-  color: white;
+  border-radius: 0 0 30px 30px;
+  margin: 0 3vh 0 3vh;
 }
 
 .main-nav .nav-logo {
@@ -24,13 +25,49 @@
   padding: 0;
 }
 
-.main-nav .nav-links a {
-  color: #ccc;
+.main-nav .nav-links .link {
+  color: var(--font-color-text);
   text-decoration: none;
-  font-weight: 500;
+  font-family: 'text';
   transition: color 0.2s;
 }
 
-.main-nav .nav-links a:hover {
+.main-nav .nav-links .link:hover {
   color: white;
+}
+
+.main-nav .search-bar {
+  background-color: #242424;
+  font-family: 'text';
+  border: none;
+  padding: 0.5vh 4vh 1vh 4vh;
+  border-radius: 6vh;
+  margin-right: 3vh;
+}
+
+.main-nav .btn-logout {
+  background-color: var(--color-second);
+  margin-left: 6vh;
+  padding: 0.5vh 4vh 1vh 4vh;
+  border-radius: 6vh;
+  font-family: 'text';
+  text-decoration: none;
+  color: white;
+}
+
+.main-nav .btn-logout:hover {
+  color: var(--font-color-text);
+}
+
+.main-nav .btn-login {
+  background-color: var(--color-main);
+  padding: 0.5vh 4vh 1vh 4vh;
+  border-radius: 6vh;
+  font-family: 'text';
+  text-decoration: none;
+  color: white;
+}
+
+.main-nav .btn-login:hover {
+  color: var(--font-color-text);
 }

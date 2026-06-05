@@ -1,10 +1,23 @@
+@mixin btn {
+  padding: 0.5vh 4vh 1vh 4vh;
+  border-radius: 6vh;
+  font-family: 'text';
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+      color: var(--font-color-text);
+  }
+}
+
 .main-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #1a1a1a;
-  color: white;
+  border-radius: 0 0 30px 30px;
+  margin: 0 3vh 0 3vh;
 
   .nav-logo {
     width: 150px;
@@ -24,15 +37,35 @@
     margin: 0;
     padding: 0;
 
-    a {
-      color: #ccc;
+    .link {
+      color: var(--font-color-text);
       text-decoration: none;
-      font-weight: 500;
+      font-family: 'text';
       transition: color 0.2s;
 
       &:hover {
         color: white;
       }
     }
+  }
+
+  .search-bar {
+    background-color: #242424;
+    font-family: 'text';
+    border: none;
+    padding: 0.5vh 4vh 1vh 4vh;
+    border-radius: 6vh;
+    margin-right: 3vh;
+  }
+
+  .btn-logout {
+    background-color: var(--color-second);
+    margin-left: 6vh;
+    @include btn;
+  }
+
+  .btn-login {
+    background-color: var(--color-main);
+    @include btn;
   }
 }
