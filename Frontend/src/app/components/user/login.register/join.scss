@@ -21,10 +21,11 @@
     border-radius: 30px;
     color: var(--font-color-text);
     font-family: 'text';
+    font-size: var(--font-size-text);
 
     h2 {
         font-family: 'title';
-        font-size: 36px;
+        font-size: var(--font-size-title);
         margin-top: 0;
         margin-bottom: 3vh;
     }

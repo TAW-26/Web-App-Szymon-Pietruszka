@@ -1,18 +1,12 @@
-<div class="profile-wrapper">
+<main>
   <div class="profile-card">
-    
-    <div class="profile-header">
-      <h2>Witaj, {{ userData?.nickname }}</h2>
-    </div>
+    <h2>Witaj {{ userData?.nickname }}</h2>
 
-    <hr class="divider" />
 
     <div class="profile-details">
-      <h3>Informacje o profilu</h3>
+      <p class="email-sub">email: {{ userData?.email }}</p>
 
-      <div class="detail-row">
-        <p class="email-sub">email: {{ userData?.email }}</p>
-        
+      <div class="detail-row">      
         <span class="label">Imię:</span>
         <ng-container *ngIf="isEditing; else showName">
           <input [(ngModel)]="editForm.name" class="edit-input" type="text" />
@@ -59,6 +53,5 @@
         <button (click)="cancelEditing()" class="btn-cancel">Anuluj</button>
       </div>
     </div>
-
   </div>
-</div>
+</main>
