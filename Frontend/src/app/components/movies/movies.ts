@@ -18,6 +18,8 @@ export class Movies {
   favoriteMessage: string = ''
   maxStars: number[] = Array.from({ length: 10 }, (_, i) => i + 1);
   hoverRatings: { [movieId: number]: number } = {};
+  openedFormId: number | null = null;
+  openedReviewsId: number | null = null;
 
   constructor(public authService: AuthService, private apiService: ApiConnect, private cdr: ChangeDetectorRef) {}
 
@@ -114,11 +116,48 @@ export class Movies {
     }
   }
 
+  
   enterHover(movieId: number, rating: number): void {
     this.hoverRatings[movieId] = rating;
   }
 
   leaveHover(movieId: number): void {
     this.hoverRatings[movieId] = 0;
+  }
+
+  reviewCreate(id_movie: number, text: string): void {
+    const movie = this.movies.find(m => m.id_movie === id_movie);
+    this.openedFormId = null;
+    if (movie) {
+      this.authService.review(id_movie, text).subscribe({
+        next: (data) => {
+          console.log("added review")
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.log('Error:', err.status);
+          
+          if (err.status === 409) {
+            console.log('Film dostał już recenzje');
+          }
+          else if (err.status === 401) {
+            console.log('Nie poprawny JWT');
+          }
+          else {
+            console.log('Something goes wrong. I can feel it');
+          }
+
+          this.cdr.detectChanges();
+        }
+      });
+    }
+  }
+
+  toggleForm(movieId: number, propertyName: 'openedFormId' | 'openedReviewsId'): void {
+    if (this[propertyName] === movieId) {
+      this[propertyName] = null;
+    } else {
+      this[propertyName] = movieId;
+    }
   }
 }

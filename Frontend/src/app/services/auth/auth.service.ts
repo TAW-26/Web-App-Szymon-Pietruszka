@@ -18,7 +18,8 @@ export class AuthService {
   private urlFavorite = '/favorite/'
   private urlFavoriteDelete = '/favorite/delete/'
   private urlUserUpdateData = '/user'
-  private urlRating = '/rating'
+  private urlPostRating = '/rating'
+  private urlPostReview = '/review'
 
   private loggedIn: BehaviorSubject<boolean>;
 
@@ -111,9 +112,21 @@ export class AuthService {
       'Authorization': `Bearer ${token}`
     });
 
-    const fullUrl = `${this.apiUrl}${this.urlRating}`;
+    const fullUrl = `${this.apiUrl}${this.urlPostRating}`;
 
     return this.http.post<any>(fullUrl, { id_movie, rating }, { headers })
+  }
+
+  review(id_movie: number, text: string): Observable<any> {
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const fullUrl = `${this.apiUrl}${this.urlPostReview}`;
+
+    return this.http.post<any>(fullUrl, { id_movie, text }, { headers })
   }
 
 
