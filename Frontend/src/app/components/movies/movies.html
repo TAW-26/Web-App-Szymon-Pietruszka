@@ -40,22 +40,25 @@
     </div>
   </div>
 
-<button class="btn-toggle-form" (click)="toggleForm(movie.id_movie, 'openedFormId')">
-  {{ openedFormId === movie.id_movie ? 'Anuluj' : 'Dodaj recenzję' }}
-</button>
-
-<div class="form-wrapper" *ngIf="openedFormId === movie.id_movie">
-  
-  <input 
-    #nowyTytul
-    type="text" 
-    placeholder="Wpisz nową nazwę filmu..."
-    class="title-input" />
-
-  <button class="btn-submit" (click)="reviewCreate(movie.id_movie, nowyTytul.value)">
-    Wyślij
+  <button class="btn-toggle-form" (click)="toggleForm(movie.id_movie, 'openedFormId')">
+    {{ openedFormId === movie.id_movie ? 'Anuluj' : 'Dodaj recenzję' }}
   </button>
 
-</div>
+  <div class="form-wrapper" *ngIf="openedFormId === movie.id_movie">
+    
+    <input 
+      #nowyTytul
+      type="text" 
+      placeholder="Wpisz nową nazwę filmu..."
+      class="title-input" />
+
+    <button class="btn-submit" (click)="reviewCreate(movie.id_movie, nowyTytul.value)">
+      Wyślij
+    </button>
+
+  </div>
+  
   <button class="favorite-btn" (click)="favortie(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
+
+  <p>{{ actionText }}</p>
 </div>

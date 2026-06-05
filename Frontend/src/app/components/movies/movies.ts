@@ -20,6 +20,7 @@ export class Movies {
   hoverRatings: { [movieId: number]: number } = {};
   openedFormId: number | null = null;
   openedReviewsId: number | null = null;
+  actionText: string = ''
 
   constructor(public authService: AuthService, private apiService: ApiConnect, private cdr: ChangeDetectorRef) {}
 
@@ -30,6 +31,7 @@ export class Movies {
         this.isLoading = false;
         this.cdr.detectChanges();
       },
+
       error: (err) => {
         this.errorMessage = 'Failed to load movies data';
         this.isLoading = false;
@@ -43,9 +45,9 @@ export class Movies {
     this.authService.setFavorite(id).subscribe({
       next: (data) => {
         console.log("added to favortie")
-        this.favoriteMessage = 'Film dodany do ulubionych';
-        this.cdr.detectChanges();
+        this.setActionText('Film dodany do ulubionych')
       },
+
       error: (err) => {
         console.log('Error:', err.status);
 
@@ -53,13 +55,11 @@ export class Movies {
           this.favortieDelete(id)
         }
         else if (err.status === 401) {
-          this.favoriteMessage = 'Nie poprawny JWT';
+          this.setActionText('Nie jesteś zalogowany')
         }
         else {
-          this.favoriteMessage = 'Something goes wrong. I can feel it';
+          this.setActionText('Something goes wrong. I can feel it')
         }
-
-        this.cdr.detectChanges();
       }
     });
   }
@@ -67,23 +67,21 @@ export class Movies {
   favortieDelete(id: number) {
     this.authService.deleteFavorite(id).subscribe({
       next: (data) => {
-        console.log("delete from favortie")
-        this.cdr.detectChanges();
+        this.setActionText('Usunięto z listy ulubionych')
       },
+
       error: (err) => {
         console.log('Error:', err.status);
         
         if (err.status === 404) {
-          this.favoriteMessage = 'Film został już usunięty dodany';
+          this.setActionText('Film został już usunięty')
         }
         else if (err.status === 401) {
-          this.favoriteMessage = 'Nie poprawny JWT';
+          this.setActionText('Nie jesteś zalogowany')
         }
         else {
-          this.favoriteMessage = 'Something goes wrong. I can feel it';
+          this.setActionText('Something goes wrong. I can feel it')
         }
-
-        this.cdr.detectChanges();
       }
     });
   }
@@ -94,23 +92,21 @@ export class Movies {
     if (movie) {
       this.authService.rating(id_movie, rating).subscribe({
         next: (data) => {
-          console.log("added rating")
-          this.cdr.detectChanges();
+          this.setActionText('Dodano ocene')
         },
+
         error: (err) => {
           console.log('Error:', err.status);
           
           if (err.status === 409) {
-            console.log('Film dostał już ocene');
+            this.setActionText('Oddałeś już ocene')
           }
           else if (err.status === 401) {
-            console.log('Nie poprawny JWT');
+            this.setActionText('Nie jesteś zalogowany')
           }
           else {
-            console.log('Something goes wrong. I can feel it');
+            this.setActionText('Something goes wrong. I can feel it')
           }
-
-          this.cdr.detectChanges();
         }
       });
     }
@@ -131,23 +127,21 @@ export class Movies {
     if (movie) {
       this.authService.review(id_movie, text).subscribe({
         next: (data) => {
-          console.log("added review")
-          this.cdr.detectChanges();
+          this.setActionText('Recenzja wysłana')
         },
+
         error: (err) => {
           console.log('Error:', err.status);
           
           if (err.status === 409) {
-            console.log('Film dostał już recenzje');
+            this.setActionText('Wysłałeś już recenzje')
           }
           else if (err.status === 401) {
-            console.log('Nie poprawny JWT');
+            this.setActionText('Nie jesteś zalogowany')
           }
           else {
-            console.log('Something goes wrong. I can feel it');
+            this.setActionText('Something goes wrong. I can feel it');
           }
-
-          this.cdr.detectChanges();
         }
       });
     }
@@ -159,5 +153,15 @@ export class Movies {
     } else {
       this[propertyName] = movieId;
     }
+  }
+
+  setActionText(text: string): void {
+    this.actionText = text
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.actionText = ''
+      this.cdr.detectChanges();
+    }, 1500);
   }
 }
