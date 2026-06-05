@@ -1,6 +1,9 @@
 <nav class="main-nav">
   <a routerLink="/" class="nav-logo"></a>
   <ul class="nav-links">
+    <li class="search-box">
+      <input type="text" [formControl]="searchControl" placeholder="Szukaj filmu..."/>
+    </li>
     <li><a routerLink="/discover">Odkrywaj</a></li>
     <li><a routerLink="/activity" *ngIf="authService.isLoggedIn$ | async">Aktywność</a></li>
     <li><a routerLink="/favorite" *ngIf="authService.isLoggedIn$ | async">Ulubione</a></li>
