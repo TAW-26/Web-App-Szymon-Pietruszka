@@ -86,7 +86,7 @@ def get_movie(ID: int, db: Session):
 
 @router.get("/")
 def read_root():
-    return {"message": "Hello There"}
+    return {"title": "MovieCheck", "description": "Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja umożliwia przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Można również oddać ocene oreaz recnezje do wybranego filmu"}
 
 
 # USER
