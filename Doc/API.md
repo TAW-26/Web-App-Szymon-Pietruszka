@@ -63,14 +63,14 @@ Pobiera szczegółowe dane aktualnie zalogowanego użytkownika na podstawie toke
 
 ### Aktualizacja danych użytkownika
 
-Modyfikuje informacje powiązane z profilem użytkownika
+Modyfikuje wysłane informacje powiązane z profilem użytkownika na podstawie tokenu. Można zmienić minimalnie jedną daną albo trzy maksymalnie.
 
 * **Metoda:** `PUT`
 * **Ścieżka:** `/user`
+* **Autoryzacja:** `Bearer Token`
 
 ```json
 {
-    "id_user": 1,
     "gender": "gender"
 }
 ```
@@ -92,6 +92,13 @@ Zwraca szczegółowe informacje o konkretnym filmie
 * **Metoda:** `GET`
 * **Ścieżka:** `/movie/{id}`
 * **Przykład:** `/movie/1`
+
+### Wyszukaj film po tytule
+
+Zwraca liste zbliżona do wyszukiwanego tytułu filmu
+
+* **Metoda:** `GET`
+* **Ścieżka:** `/search?q=`
 
 
 ## Ulubione Filmy

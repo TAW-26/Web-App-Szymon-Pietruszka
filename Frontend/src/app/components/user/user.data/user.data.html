@@ -12,25 +12,53 @@
 
       <div class="detail-row">
         <p class="email-sub">email: {{ userData?.email }}</p>
+        
         <span class="label">Imię:</span>
-        <span class="value" [class.empty]="!userData?.name">
-          {{ userData?.name || '' }}
-        </span>
+        <ng-container *ngIf="isEditing; else showName">
+          <input [(ngModel)]="editForm.name" class="edit-input" type="text" />
+        </ng-container>
+        <ng-template #showName>
+          <span class="value" [class.empty]="!userData?.name">
+            {{ userData?.name || 'Brak danych' }}
+          </span>
+        </ng-template>
       </div>
 
       <div class="detail-row">
-        <span class="label">Data urodzenia:</span>
-        <span class="value" [class.empty]="!userData?.birthdate">
-          {{ userData?.birthdate || '' }}
-        </span>
+        <span class="label">Urodziny:</span>
+        <ng-container *ngIf="isEditing; else showBirthdate">
+          <input [(ngModel)]="editForm.birthdate" class="edit-input" type="date" />
+        </ng-container>
+        <ng-template #showBirthdate>
+          <span class="value" [class.empty]="!userData?.birthdate">
+            {{ userData?.birthdate || 'Brak danych' }}
+          </span>
+        </ng-template>
       </div>
 
       <div class="detail-row">
         <span class="label">Płeć:</span>
-        <span class="value" [class.empty]="!userData?.gender">
-          {{ userData?.gender || '' }}
-        </span>
+        <ng-container *ngIf="isEditing; else showGender">
+          <input [(ngModel)]="editForm.gender" class="edit-input" type="text" />
+        </ng-container>
+        <ng-template #showGender>
+          <span class="value" [class.empty]="!userData?.gender">
+            {{ userData?.gender || 'Brak danych' }}
+          </span>
+        </ng-template>
       </div>
     </div>
+
+    <div class="profile-actions">
+      <button *ngIf="!isEditing" (click)="startEditing()" class="btn-edit">
+        Edytuj profil
+      </button>
+      
+      <div *ngIf="isEditing" class="edit-buttons">
+        <button (click)="saveChanges()" class="btn-save">Zapisz</button>
+        <button (click)="cancelEditing()" class="btn-cancel">Anuluj</button>
+      </div>
+    </div>
+
   </div>
 </div>

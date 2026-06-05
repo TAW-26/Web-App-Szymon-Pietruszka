@@ -17,6 +17,9 @@ export class AuthService {
   private urlRatings = '/ratings/user'
   private urlFavorite = '/favorite/'
   private urlFavoriteDelete = '/favorite/delete/'
+  private urlUserUpdateData = '/user'
+  private urlPostRating = '/rating'
+  private urlPostReview = '/review'
 
   private loggedIn: BehaviorSubject<boolean>;
 
@@ -48,6 +51,17 @@ export class AuthService {
     });
 
     return this.http.get<any>(fullURL, { headers });
+  }
+
+  putUserData(data: any): Observable<any> {
+    const fullURL = this.apiUrl + this.urlUserUpdateData
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<any>(fullURL, data, { headers, responseType: 'text' as 'json' });
   }
 
   getUserData(): Observable<any> {
@@ -89,6 +103,30 @@ export class AuthService {
     const fullUrl = `${this.apiUrl}${this.urlFavoriteDelete}${id}`;
 
     return this.http.delete<any>(fullUrl, { headers });
+  }
+
+  rating(id_movie: number, rating: number): Observable<any> {
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const fullUrl = `${this.apiUrl}${this.urlPostRating}`;
+
+    return this.http.post<any>(fullUrl, { id_movie, rating }, { headers })
+  }
+
+  review(id_movie: number, text: string): Observable<any> {
+    const token = this.cookieService.get('access_token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    const fullUrl = `${this.apiUrl}${this.urlPostReview}`;
+
+    return this.http.post<any>(fullUrl, { id_movie, text }, { headers })
   }
 
 
