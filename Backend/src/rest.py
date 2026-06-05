@@ -1,7 +1,7 @@
-from fastapi import Depends, HTTPException, Response, status
+from fastapi import Depends, HTTPException, Response, status, Query
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter
-from typing import List
+from typing import List, Optional
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
@@ -150,6 +150,17 @@ async def login(data: structure.LoginSchema, db: Session = Depends(get_db)):
 
 
 # MOVIE
+
+@router.get("/search", response_model=List[structure.MovieResponseSchema])
+def get_movies(q: Optional[str] = Query(None), db: Session = Depends(get_db)):
+    query = db.query(models.Movie).options(joinedload(models.Movie.genres), joinedload(models.Movie.actors), joinedload(models.Movie.reviews), joinedload(models.Movie.reviews).joinedload(models.Review.user_data))
+
+    if q and q.strip():
+        search_pattern = f"%{q.strip()}%"
+        query = query.filter(models.Movie.title.ilike(search_pattern))
+    
+    movies = query.all()
+    return movies
 
 @router.get("/movies", response_model=List[structure.MovieResponseSchema])
 def get_movies(db: Session = Depends(get_db)):

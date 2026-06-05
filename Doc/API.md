@@ -93,6 +93,13 @@ Zwraca szczegółowe informacje o konkretnym filmie
 * **Ścieżka:** `/movie/{id}`
 * **Przykład:** `/movie/1`
 
+### Wyszukaj film po tytule
+
+Zwraca liste zbliżona do wyszukiwanego tytułu filmu
+
+* **Metoda:** `GET`
+* **Ścieżka:** `/search?q=`
+
 
 ## Ulubione Filmy
 
