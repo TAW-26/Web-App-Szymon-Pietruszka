@@ -10,6 +10,19 @@
   <p class="movie-director"><strong>Reżyseria:</strong> {{ movie.director }}</p>
   <p class="movie-year"><strong>Rok:</strong> {{ movie.year }}</p>
   <p class="movie-rating"><strong>Ocena:</strong> ★ {{ movie.rating | number:'1.1-1' }}</p>
+
+  <div class="stars-rating-wrapper">
+    <div class="stars-container" (mouseleave)="leaveHover(movie.id_movie)">
+      <span 
+        *ngFor="let star of maxStars" 
+        class="star"
+        [class.active]="star <= (hoverRatings[movie.id_movie] || 0)"
+        (mouseenter)="enterHover(movie.id_movie, star)"
+        (click)="rate(movie.id_movie, star)">
+        &#9733;
+      </span>
+    </div>
+  </div>
   
   <p class="movie-actors"><strong>Obsada:</strong> {{ movie.actors ? movie.actors.join(', ') : '' }}</p>
   
