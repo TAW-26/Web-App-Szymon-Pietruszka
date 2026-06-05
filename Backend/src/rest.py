@@ -96,8 +96,8 @@ async def get_me(current_user: models.User = Depends(get_current_user), db: Sess
     return current_user
 
 @router.put("/user")
-def put_new_data_user(data: structure.UserResponeSchema, response: Response, db: Session = Depends(get_db)):
-    user = get_user_by_ID(data.id_user, db)
+def put_new_data_user(data: structure.UserUpdateDataSchema, response: Response, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    user = current_user
 
     if data.birthdate:
         user.birthdate = data.birthdate
@@ -108,15 +108,10 @@ def put_new_data_user(data: structure.UserResponeSchema, response: Response, db:
     if data.name and data.name.strip() != "":
         user.name = data.name
 
-    if data.password and data.password.strip() != "":
-        hashed_password = pwd_context.hash(data.password)
-        user.password = hashed_password
-
     db.commit()
     db.refresh(user)
 
     response.status_code = status.HTTP_204_NO_CONTENT
-    return {"message": "Updated user data"}
 
 @router.post("/register", status_code=201)
 async def register(user_data: structure.UserResponeSchema, db: Session = Depends(get_db)):

@@ -123,6 +123,14 @@ class UserResponeSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class UserUpdateDataSchema(BaseModel):
+    gender: Optional[str] = None
+    birthdate: Optional[date] = None
+    name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 class UserDataResponeSchema(BaseModel):
     nickname: str
     name: Optional[str] = None
