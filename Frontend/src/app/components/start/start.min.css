@@ -1,1 +1,1 @@
-@use '../../styles/mixins';main{display:flex;flex-direction:column;justify-content:center;text-align:center}main h1{font-size:var(--font-size-title);font-family:'title';color:var(--font-color-title)}main p{max-width:120vh}
+main{display:flex;flex-direction:column;justify-content:center;text-align:center}main h1{font-size:var(--font-size-title);font-family:'title';color:var(--font-color-title)}main p{font-size:var(--font-size-text);font-family:'text';color:var(--font-color-text);text-align:justify;max-width:120vh}
