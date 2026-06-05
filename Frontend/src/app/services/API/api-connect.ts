@@ -12,8 +12,8 @@ export class ApiConnect {
 
   constructor(private http: HttpClient) {}
 
-  getMessage(): Observable<{ message: string }> {
-    return this.http.get<{ message: string }>(this.apiUrl)
+  getMessage(): Observable<{ title: string, description: string }> {
+    return this.http.get<{ title: string, description: string }>(this.apiUrl)
   }
 
   getMovies(): Observable<MovieResponse[]> {

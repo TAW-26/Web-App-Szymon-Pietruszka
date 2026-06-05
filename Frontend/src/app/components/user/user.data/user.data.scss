@@ -1,0 +1,72 @@
+@mixin btn {
+  padding: 0.5vh 4vh 1vh 4vh;
+  border-radius: 6vh;
+  font-family: 'text';
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+    color: var(--font-color-text);
+  }
+}
+
+.profile-card {
+    background-color: var(--color-main-dark);
+    padding: 10vh;
+    border-radius: 20px;
+    color: var(--font-color-text);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    font-family: 'text';
+
+    h2 {
+        font-family: 'title';
+        font-size: var(--font-size-title);
+        color: var(--font-color-title);
+    }
+
+    .profile-actions {
+        button {
+            margin-top: 5vh;
+            background-color: var(--color-main);
+            @include btn;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 1vh;
+        }
+    }
+}
+
+.detail-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 1vh;
+    margin-bottom: 0.5vh;
+
+    &:has(.edit-input) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5vh;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+
+    input {
+        background-color: var(--color-second-dark);
+        border: none;
+        color: white;
+        height: 4vh;
+        border-radius: 20px;
+    }
+
+    .edit-input {
+        width: 100%;
+        padding: 6px;
+    }
+}

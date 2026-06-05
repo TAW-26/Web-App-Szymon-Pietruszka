@@ -9,17 +9,21 @@ import { ApiConnect } from '../../services/API/api-connect';
   styleUrl: './start.scss',
 })
 export class Start implements OnInit{
-  backendMessage: string = "load"
+  backendTitle: string = "load"
+  backendDescription: string = ""
+  
   constructor(private messageConnect: ApiConnect, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.messageConnect.getMessage().subscribe({
       next: (data) => {
-        this.backendMessage = data.message; 
+        this.backendTitle = data.title;
+        this.backendDescription = data.description; 
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.backendMessage = 'Failed to connect with backend';
+        this.backendTitle = 'Failed to connect with backend';
+        this.backendDescription = ''
         console.error(err);
       }
     });
