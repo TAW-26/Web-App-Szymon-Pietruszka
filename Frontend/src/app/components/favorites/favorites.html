@@ -57,6 +57,7 @@
             </div>
 
           </div>
+          <button class="favorite-btn" (click)="favortieDelete(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
         </div>
 
       } @empty {
@@ -64,6 +65,5 @@
       }
 
     </div>
-
   }
 </div>
