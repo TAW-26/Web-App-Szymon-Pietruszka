@@ -23,14 +23,6 @@ models.Base.metadata.create_all(bind=engine)
 
 # FUNKCJE
 
-def get_user_by_ID(ID: int, db: Session):
-    user = db.query(models.User).filter(models.User.id_user == ID).first()   
-
-    if not user:
-        raise HTTPException(status_code=404, detail=f"User with ID {ID} does not exist")
-    
-    return user
-
 def get_user_by_nickname(nickname: str, db: Session):
     user = db.query(models.User).filter(models.User.nickname == nickname).first()   
 
