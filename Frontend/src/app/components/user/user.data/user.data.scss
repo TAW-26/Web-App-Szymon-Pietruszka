@@ -27,9 +27,13 @@
         color: var(--font-color-title);
     }
 
+    h3 {
+        color: var(--color-error);
+    }
+
     .profile-actions {
         button {
-            margin-top: 5vh;
+            margin-top: 3vh;
             background-color: var(--color-main);
             @include btn;
         }
@@ -57,12 +61,24 @@
         font-weight: bold;
     }
 
-    input {
+    input{
         background-color: var(--color-second-dark);
         border: none;
         color: white;
         height: 4vh;
         border-radius: 20px;
+    }
+
+    .edit-select {
+        background-color: var(--color-second-dark);
+        border: none;
+        color: white;
+        height: 4vh;
+        border-radius: 20px;
+        display: flex;
+        width: 100%;
+        padding: 6px;
+        height: 6vh;
     }
 
     .edit-input {
