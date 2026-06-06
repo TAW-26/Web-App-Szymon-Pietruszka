@@ -46,6 +46,14 @@ uvicorn main:app --reload
 
 Serwer jest dostępny pod adresem: http://localhost:8000
 
+## Testy
+
+Do przeglądania testów trzeba wpisać dane (nickname, password) a następnie przejśc do `test` i uruchomić:
+
+```bash
+pytest test_api.py -v
+```
+
 ## Diagram ERD
 Przedstawia strukturę bazy danych aplikacji. System przechowuje informacje o filmach, użytkownikach, aktorach, gatunkach, ocenach, recenzjach, polubionych filmach oraz relacjach między nimi.
 
