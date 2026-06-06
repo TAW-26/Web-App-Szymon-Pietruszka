@@ -49,3 +49,15 @@ def test_get_me_with_JWT():
     # Assert
     assert response.status_code == 200
     assert data["nickname"] == nickname
+
+def test_get_me_with_wrong_JWT():
+    # Arrange
+    url = f"{BASE_URL}/user/me"
+    JWT_WRONG = 'qwerty'
+    headers = {"Authorization": f"Bearer {JWT_WRONG}"}
+
+    # Act
+    response = httpx.get(url, headers=headers)
+
+    # Assert
+    assert response.status_code == 401
