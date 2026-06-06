@@ -61,3 +61,15 @@ def test_get_me_with_wrong_JWT():
 
     # Assert
     assert response.status_code == 401
+
+def test_delete_favorite_with_wrong_JWT():
+    # Arrange
+    url = f"{BASE_URL}/favorite/delete/1"
+    JWT_WRONG = 'qwerty'
+    headers = {"Authorization": f"Bearer {JWT_WRONG}"}
+
+    # Act
+    response = httpx.delete(url, headers=headers)
+
+    # Assert
+    assert response.status_code == 401
