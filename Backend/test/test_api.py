@@ -2,6 +2,8 @@ import httpx
 
 BASE_URL = "http://localhost:8000"
 JWT = ''
+nickname = "szymon"
+password = "szymon"
 
 
 def test_read_title():
@@ -15,12 +17,13 @@ def test_read_title():
     # Assert
     assert response.json()["title"] == expected_title
 
+
 def test_login():
-    # Arrange
+    global JWT
     url = f"{BASE_URL}/login"
     payload = {
-        "nickname": "szymon",
-        "password": "szymon"
+        "nickname": nickname,
+        "password": password
     }
 
     # Act
@@ -32,3 +35,17 @@ def test_login():
 
     # Assert
     assert response.status_code == 200
+
+
+def test_get_me_with_JWT():
+    # Arrange
+    url = f"{BASE_URL}/user/me"
+    headers = {"Authorization": f"Bearer {JWT}"}
+
+    # Act
+    response = httpx.get(url, headers=headers)
+    data = response.json()
+
+    # Assert
+    assert response.status_code == 200
+    assert data["nickname"] == nickname
