@@ -16,6 +16,7 @@ export class UserData implements OnInit{
   userData: UserDataResponse | null = null;
   editForm: any = {};
   isEditing: boolean = false;
+  errorMessage: string = ''
 
   constructor(private authService: AuthService, private cdr: ChangeDetectorRef, private http: HttpClient) {}
 
@@ -58,10 +59,21 @@ export class UserData implements OnInit{
         }
         
         this.isEditing = false;
+        this.errorMessage = '';
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Coś poszło nie tak podczas zapisu:', err);
+
+        if (err.status === 400) {
+          this.errorMessage = 'Błędna data urodzin';
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.errorMessage = '';
+            this.cdr.detectChanges();
+          }, 4000);
+        }
       }
     });
   }

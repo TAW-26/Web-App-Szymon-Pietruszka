@@ -1,4 +1,4 @@
-<div *ngIf="errorMessage" style="color: #ff4d4d; margin-bottom: 15px; font-size: 0.9rem;">
+<div *ngIf="errorMessage" class="errorMessage">
   {{ errorMessage }}
 </div>
 
@@ -28,24 +28,15 @@
   <button class="btn-toggle-form" (click)="toggleForm(movie.id_movie, 'openedReviewsId')">
     {{ openedReviewsId === movie.id_movie ? 'Schowaj' : 'Recenzje'}}
   </button>
-  
-  <div class="reviews-section" *ngIf="movie.reviews && movie.reviews.length > 0 && openedReviewsId === movie.id_movie">
-    <h4>Recenzje:</h4>
-    <div class="review-item" *ngFor="let review of movie.reviews"> 
-      <div class="review-meta">
-        <span class="review-author">@{{ review.nickname }}</span>
-        <span class="review-date">{{ review.created_at | date:'dd.MM.yyyy' }}</span>
-      </div>
-      <p class="review-text">"{{ review.text }}"</p>
-    </div>
-  </div>
 
+  
   <button class="btn-toggle-form" (click)="toggleForm(movie.id_movie, 'openedFormId')">
     {{ openedFormId === movie.id_movie ? 'Anuluj' : 'Dodaj recenzję' }}
   </button>
 
+  <button class="favorite-btn" (click)="favortie(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
+
   <div class="form-wrapper" *ngIf="openedFormId === movie.id_movie">
-    
     <input 
       #nowyTytul
       type="text" 
@@ -55,10 +46,18 @@
     <button class="btn-submit" (click)="reviewCreate(movie.id_movie, nowyTytul.value)">
       Wyślij
     </button>
-
   </div>
   
-  <button class="favorite-btn" (click)="favortie(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
-
   <p>{{ actionText }}</p>
+  
+  <div class="reviews-section" *ngIf="movie.reviews && movie.reviews.length > 0 && openedReviewsId === movie.id_movie">
+    <h4>Recenzje:</h4>
+    <div class="review-item" *ngFor="let review of movie.reviews"> 
+      <div class="review-meta">
+        <span class="review-author">{{ review.nickname }}</span>
+        <span class="review-date">{{ review.created_at | date:'dd.MM.yyyy' }}</span>
+      </div>
+      <p class="review-text">"{{ review.text }}"</p>
+    </div>
+  </div>
 </div>

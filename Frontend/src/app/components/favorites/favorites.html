@@ -1,20 +1,20 @@
 <div class="favorites-container">
-  <h2>Moje Ulubione Filmy</h2>
+  <h2>Moje Ulubione</h2>
+
+  @if (favoriteMessage) {
+    <div class="errorMessage">
+      {{ favoriteMessage }}
+    </div>
+  }
 
   @if (userFavorites) {
-    
     <div class="movies-grid">
       
       @for (movie of userFavorites.favorite; track movie.id_movie) {
-        
         <div class="movie-card">
-          
-          <div class="movie-poster">
-            <span class="movie-rating">{{ movie.rating }}</span>
-          </div>
-
           <div class="movie-info">
             <h3>{{ movie.title }} <span class="year">({{ movie.year }})</span></h3>
+            <span class="movie-rating">Ocena: {{ movie.rating }}/10</span>
             <p class="description">{{ movie.description }}</p>
             
             <div class="meta-data">
@@ -39,27 +39,41 @@
             </div>
 
             <div class="section-block reviews-section">
-              <h4>Krótkie recenzje ({{ movie.reviews.length }}):</h4>
               
-              @for (review of movie.reviews; track review.created_at) {
-                <div class="review-item">
-                  <div class="review-header">
-                    <span class="review-user">{{ review.nickname }}</span>
-                    <br>
-                    <span class="review-date">{{ review.created_at }}</span>
-                  </div>
-                  <p class="review-text">"{{ review.text }}"</p>
+              <button type="button" class="reviews-toggle-btn" (click)="toggleReviews(movie.id_movie)">
+                <h4>Krótkie recenzje ({{ movie.reviews.length || 0 }})</h4>
+                <span class="arrow" [class.rotated]="isReviewsExpanded(movie.id_movie)">▼</span>
+              </button>
+              
+              @if (isReviewsExpanded(movie.id_movie)) {
+                <div class="reviews-content">
+                  @for (review of movie.reviews; track review.created_at) {
+                    <div class="review-item">
+                      <div class="review-header">
+                        <span class="review-user">{{ review.nickname }}</span>
+                        <span class="review-date">{{ review.created_at }}</span>
+                      </div>
+                      <p class="review-text">"${{ review.text }}"</p>
+                    </div>
+                  } @empty {
+                    <p class="no-reviews">Brak recenzji dla tego filmu.</p>
+                  }
                 </div>
-              } @empty {
-                <p class="no-reviews">Brak recenzji dla tego filmu.</p>
               }
 
             </div>
 
           </div>
-          <button class="favorite-btn" (click)="favortieDelete(movie.id_movie)" *ngIf="authService.isLoggedIn$ | async">Polub</button>
-        </div>
 
+          <button 
+            class="favorite-btn" 
+            [disabled]="isCooldown"
+            (click)="favortieDelete(movie.id_movie)" 
+            *ngIf="authService.isLoggedIn$ | async">
+            Usuń z ulubionych
+          </button>
+
+        </div>
       } @empty {
         <div class="empty-list">Nie dodałeś jeszcze żadnych filmów do ulubionych.</div>
       }

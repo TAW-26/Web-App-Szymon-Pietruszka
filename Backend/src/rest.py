@@ -5,6 +5,7 @@ from typing import List, Optional
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
+from datetime import datetime
 import jwt
 
 from src.database.connect import engine, get_db
@@ -79,6 +80,28 @@ def get_movie(ID: int, db: Session):
     
     return movie
 
+def check_age(birthdate: str) -> bool:
+    current = datetime.now().date()
+    
+    try:
+        birthdate = datetime.strptime(birthdate, "%Y-%m-%d").date()
+    except ValueError:
+        print("Wrong format date: DD-MM-YYYY")
+        return False
+
+    age = current.year - birthdate.year
+    if (current.month, birthdate.day) < (birthdate.month, birthdate.day):
+        age -= 1
+
+    if birthdate > current:
+        print("Birthdate from future")
+        return False
+        
+    if age > 100:
+        print(f"Age {age} is more than 100 year. Imposible")
+        return False
+
+    return age >= 18
 
 
 
@@ -100,6 +123,8 @@ def put_new_data_user(data: structure.UserUpdateDataSchema, response: Response, 
     user = current_user
 
     if data.birthdate:
+        if not check_age(str(data.birthdate)):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,   detail="Wrong age")
         user.birthdate = data.birthdate
         
     if data.gender:

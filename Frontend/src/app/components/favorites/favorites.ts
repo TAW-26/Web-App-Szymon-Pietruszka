@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserFavoritesResponse } from '../../services/models/data.models';
 import { CommonModule } from '@angular/common';
@@ -10,10 +10,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './favorites.html',
   styleUrl: './favorites.scss',
 })
-export class Favorites {
+export class Favorites implements OnInit {
   userFavorites: UserFavoritesResponse | null = null;
   favoriteMessage: string = '';
   isCooldown: boolean = false;
+  expandedReviews = new Set<number>();
 
   constructor(public authService: AuthService, private cdr: ChangeDetectorRef) {}
 
@@ -30,13 +31,27 @@ export class Favorites {
       error: (err) => {
         console.error("Failed to load user favorites: ", err);
       }
-    })
+    });
   }
 
-  favortieDelete(id: number) {
+  toggleReviews(movieId: number): void {
+    if (this.expandedReviews.has(movieId)) {
+      this.expandedReviews.delete(movieId);
+    } else {
+      this.expandedReviews.add(movieId);
+    }
+    this.cdr.detectChanges(); 
+  }
+
+  isReviewsExpanded(movieId: number): boolean {
+    return this.expandedReviews.has(movieId);
+  }
+
+  favortieDelete(id: number): void {
     if (this.isCooldown) return;
 
     this.isCooldown = true;
+    this.favoriteMessage = '';
 
     this.authService.deleteFavorite(id).subscribe({
       next: (data) => {
@@ -62,6 +77,7 @@ export class Favorites {
         else {
           this.favoriteMessage = 'Something goes wrong. I can feel it';
         }
+        this.cdr.detectChanges();
       }
     });
 

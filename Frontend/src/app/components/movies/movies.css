@@ -1,75 +1,221 @@
-.reviews-section {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #eee;
+.errorMessage {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: var(--color-error);
+  padding: 12px 20px;
+  border-radius: calc(12px - 4px);
+  border-left: 5px solid var(--color-error);
+  margin-bottom: 24px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: 'text', sans-serif;
 }
 
-.reviews-section h4 {
-  font-size: 0.85rem;
-  color: #555;
-  margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.card {
+  background: var(--color-second-dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'text', sans-serif;
+  color: var(--font-color-text);
 }
 
-.review-item {
-  background: #f8f9fa;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  margin-bottom: 0.5rem;
-  border-left: 3px solid #0066cc;
+.card::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
-.review-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  margin-bottom: 0.25rem;
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
-.review-author {
+.card .movie-title {
+  font-family: 'title', sans-serif;
+  font-size: calc(var(--font-size-title) * 0.8);
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: var(--font-color-title);
+}
+
+.card .movie-year, .card .movie-director, .card .movie-actors, .card .movie-rating {
+  font-size: var(--font-size-text);
+  margin: 6px 0;
+}
+
+.card .movie-year strong, .card .movie-director strong, .card .movie-actors strong, .card .movie-rating strong {
+  color: var(--font-color-title);
   font-weight: 600;
-  color: #333;
 }
 
-.review-date {
-  color: #999;
+.card .movie-description {
+  font-size: var(--font-size-text);
+  line-height: 1.6;
+  color: var(--font-color-text);
+  margin: 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.review-text {
-  font-size: 0.8rem;
-  color: #444;
-  margin: 0;
-  font-style: italic;
-  line-height: 1.3;
+.card .movie-rating {
+  color: var(--color-main);
+  font-weight: bold;
+  font-size: 1.1rem;
 }
 
-.stars-rating-wrapper {
-  margin: 20px 0;
+.card .stars-rating-wrapper {
+  margin: 15px 0;
 }
 
-.stars-rating-wrapper .stars-container {
+.card .stars-rating-wrapper .stars-container {
   display: inline-flex;
   gap: 4px;
+}
+
+.card .stars-rating-wrapper .stars-container .star {
+  font-size: 1.6rem;
+  color: #4a4a4a;
   cursor: pointer;
+  transition: color 0.2s ease, transform 0.1s ease;
 }
 
-.stars-rating-wrapper .stars-container .star {
-  font-size: 32px;
-  color: #ccc;
-  transition: color 0.2s, transform 0.1s;
-}
-
-.stars-rating-wrapper .stars-container .star.active {
-  color: #ffca28;
-}
-
-.stars-rating-wrapper .stars-container .star:hover {
+.card .stars-rating-wrapper .stars-container .star:hover {
   transform: scale(1.2);
 }
 
-.stars-rating-wrapper .rating-info {
-  font-family: sans-serif;
-  margin-top: 8px;
-  color: #444;
+.card .stars-rating-wrapper .stars-container .star.active {
+  color: var(--color-main);
+}
+
+.card .btn-toggle-form {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--font-color-text);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 10px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.card .btn-toggle-form:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.card .favorite-btn {
+  background-color: var(--color-main);
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+  float: right;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.card .favorite-btn:hover {
+  background-color: var(--color-second);
+  transform: scale(1.05);
+}
+
+.card .reviews-section {
+  background-color: var(--color-main-dark);
+  border-radius: calc(12px - 4px);
+  padding: 16px;
+  margin-top: 15px;
+}
+
+.card .reviews-section h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--font-color-title);
+}
+
+.card .reviews-section .review-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 0;
+}
+
+.card .reviews-section .review-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.card .reviews-section .review-item .review-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.card .reviews-section .review-item .review-meta .review-author {
+  font-weight: 600;
+  color: var(--color-main);
+}
+
+.card .reviews-section .review-item .review-meta .review-date {
+  color: var(--font-color-text);
+  opacity: 0.6;
+}
+
+.card .reviews-section .review-item .review-text {
+  margin: 0;
+  font-style: italic;
+  color: var(--font-color-text);
+}
+
+.card .form-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  align-items: center;
+}
+
+.card .form-wrapper .title-input {
+  flex: 1;
+  padding: 10px 14px;
+  background-color: var(--color-main-dark);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: calc(12px - 4px);
+  font-size: var(--font-size-text);
+  color: var(--font-color-text);
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card .form-wrapper .title-input:focus {
+  border-color: var(--color-main);
+  box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+}
+
+.card .form-wrapper .btn-submit {
+  background-color: var(--color-main);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: calc(12px - 4px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card .form-wrapper .btn-submit:hover {
+  background-color: #b80710;
+}
+
+.card > p:last-child {
+  font-size: 0.85rem;
+  color: var(--font-color-text);
+  opacity: 0.5;
+  margin-top: 15px;
+  margin-bottom: 0;
+  text-align: center;
 }

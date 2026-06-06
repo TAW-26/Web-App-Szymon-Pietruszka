@@ -2,6 +2,7 @@
   <div class="profile-card">
     <h2>Witaj {{ userData?.nickname }}</h2>
 
+    <h3>{{ errorMessage }}</h3>
 
     <div class="profile-details">
       <p class="email-sub">email: {{ userData?.email }}</p>
@@ -33,8 +34,13 @@
       <div class="detail-row">
         <span class="label">Płeć:</span>
         <ng-container *ngIf="isEditing; else showGender">
-          <input [(ngModel)]="editForm.gender" class="edit-input" type="text" />
+          <select [(ngModel)]="editForm.gender" class="edit-select">
+            <option value="" disabled selected>Wybierz płeć</option>
+            <option value="Mężczyzna">Mężczyzna</option>
+            <option value="Kobieta">Kobieta</option>
+          </select>
         </ng-container>
+        
         <ng-template #showGender>
           <span class="value" [class.empty]="!userData?.gender">
             {{ userData?.gender || 'Brak danych' }}
