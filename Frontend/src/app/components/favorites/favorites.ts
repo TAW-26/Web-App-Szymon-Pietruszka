@@ -83,6 +83,7 @@ export class Favorites implements OnInit {
 
     setTimeout(() => {
       this.isCooldown = false;
+      this.cdr.detectChanges();
     }, 2000);
   }
 }
