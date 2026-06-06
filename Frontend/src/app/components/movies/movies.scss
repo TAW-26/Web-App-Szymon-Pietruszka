@@ -1,76 +1,238 @@
-.reviews-section {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #eee;
+$primary-color: var(--color-main);
+$accent-color: var(--color-second);
+$star-color:  var(--color-main);
 
-  h4 {
-    font-size: 0.85rem;
-    color: #555;
-    margin: 0 0 0.5rem 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+$text-main: var(--font-color-text);
+$text-title: var(--font-color-title);
+
+$error-bg: rgba(255, 77, 79, 0.1); 
+$error-text: var(--color-error);
+
+$border-radius: 12px;
+$transition-speed: 0.3s;
+
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
   }
 }
 
-.review-item {
-  background: #f8f9fa;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  margin-bottom: 0.5rem;
-  border-left: 3px solid #0066cc;
+
+.errorMessage {
+  background-color: $error-bg;
+  color: $error-text;
+  padding: 12px 20px;
+  border-radius: calc(#{$border-radius} - 4px);
+  border-left: 5px solid $error-text;
+  margin-bottom: 24px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: 'text', sans-serif;
 }
 
-.review-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  margin-bottom: 0.25rem;
-}
+.card {
+  @include clearfix; 
+  background: var(--color-second-dark);
+  border-radius: $border-radius;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+  margin-bottom: 30px;
+  transition: transform $transition-speed ease, box-shadow $transition-speed ease;
+  font-family: 'text', sans-serif;
+  color: $text-main;
 
-.review-author {
-  font-weight: 600;
-  color: #333;
-}
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  }
 
-.review-date {
-  color: #999;
-}
+  .movie-title {
+    font-family: 'title', sans-serif;
+    font-size: calc(var(--font-size-title) * 0.8);
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: $text-title;
+  }
 
-.review-text {
-  font-size: 0.8rem;
-  color: #444;
-  margin: 0;
-  font-style: italic;
-  line-height: 1.3;
-}
+  .movie-year, .movie-director, .movie-actors, .movie-rating {
+    font-size: var(--font-size-text);
+    margin: 6px 0;
+    
+    strong {
+      color: $text-title;
+      font-weight: 600;
+    }
+  }
 
+  .movie-description {
+    font-size: var(--font-size-text);
+    line-height: 1.6;
+    color: $text-main;
+    margin: 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+  }
 
-.stars-rating-wrapper {
-  margin: 20px 0;
+  .movie-rating {
+    color: $star-color;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
 
-  .stars-container {
-    display: inline-flex;
-    gap: 4px;
-    cursor: pointer;
+  .stars-rating-wrapper {
+    margin: 15px 0;
 
-    .star {
-      font-size: 32px;
-      color: #ccc;
-      transition: color 0.2s, transform 0.1s;
+    .stars-container {
+      display: inline-flex;
+      gap: 4px;
 
-      &.active {
-        color: #ffca28;
-      }
+      .star {
+        font-size: 1.6rem;
+        color: #4a4a4a; 
+        cursor: pointer;
+        transition: color 0.2s ease, transform 0.1s ease;
 
-      &:hover {
-        transform: scale(1.2);
+        &:hover {
+          transform: scale(1.2);
+        }
+
+        &.active {
+          color: $star-color;
+        }
       }
     }
   }
 
-  .rating-info {
-    font-family: sans-serif;
-    margin-top: 8px;
-    color: #444;
+  .btn-toggle-form {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: $text-main;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 10px;
+    margin-top: 10px;
+    transition: all $transition-speed ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  .favorite-btn {
+    background-color: $primary-color; 
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    float: right;
+    transition: background-color $transition-speed ease, transform 0.2s;
+
+    &:hover {
+      background-color: $accent-color;
+      transform: scale(1.05);
+    }
+  }
+
+  .reviews-section {
+    background-color: var(--color-main-dark); 
+    border-radius: calc(#{$border-radius} - 4px);
+    padding: 16px;
+    margin-top: 15px;
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: $text-title;
+    }
+
+    .review-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 10px 0;
+
+      &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .review-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+
+        .review-author {
+          font-weight: 600;
+          color: var(--color-main); 
+        }
+
+        .review-date {
+          color: $text-main;
+          opacity: 0.6;
+        }
+      }
+
+      .review-text {
+        margin: 0;
+        font-style: italic;
+        color: $text-main;
+      }
+    }
+  }
+
+  .form-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    align-items: center;
+
+    .title-input {
+      flex: 1;
+      padding: 10px 14px;
+      background-color: var(--color-main-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: calc(#{$border-radius} - 4px);
+      font-size: var(--font-size-text);
+      color: $text-main;
+      outline: none;
+      transition: border-color $transition-speed ease, box-shadow $transition-speed ease;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+      }
+    }
+
+    .btn-submit {
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: calc(#{$border-radius} - 4px);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color $transition-speed ease;
+
+      &:hover {
+        background-color: #b80710;
+      }
+    }
+  }
+
+  & > p:last-child {
+    font-size: 0.85rem;
+    color: $text-main;
+    opacity: 0.5;
+    margin-top: 15px;
+    margin-bottom: 0;
+    text-align: center;
   }
 }
