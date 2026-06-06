@@ -2,8 +2,8 @@ import httpx
 
 BASE_URL = "http://localhost:8000"
 JWT = ''
-nickname = "szymon"
-password = "szymon"
+nickname = ""
+password = ""
 
 
 def test_read_title():
@@ -84,3 +84,25 @@ def test_get_favorites():
 
     # Assert
     assert response.status_code == 200
+
+def test_post_rating_two_times():
+    # Arrange
+    url = f"{BASE_URL}/rating"
+    headers = {"Authorization": f"Bearer {JWT}"}
+    payload = {
+        "id_movie": 1,
+        "rating": 9
+    }
+
+    # Act
+    first_response = httpx.post(url, json=payload, headers=headers)
+
+    # Assert - jeśli nie wystawiono wcześniej
+    assert first_response.status_code == 201
+
+    # Act
+    second_response = httpx.post(url, json=payload, headers=headers)
+
+    # Assert
+    assert second_response.status_code == 409
+    assert second_response.json()["detail"] == "This user already set rate for this movie"
