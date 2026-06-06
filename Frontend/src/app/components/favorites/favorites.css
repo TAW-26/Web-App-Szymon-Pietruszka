@@ -1,0 +1,296 @@
+.favorites-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'text', sans-serif;
+}
+
+.favorites-container h2 {
+  font-family: 'title', sans-serif;
+  color: var(--font-color-title);
+  font-size: var(--font-size-title);
+  margin-bottom: 24px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 10px;
+}
+
+.errorMessage {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: var(--color-error);
+  padding: 12px 20px;
+  border-radius: calc(12px - 4px);
+  border-left: 5px solid var(--color-error);
+  margin-bottom: 24px;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+}
+
+.movie-card {
+  background: var(--color-second-dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+}
+
+.movie-card .movie-info {
+  flex-grow: 1;
+}
+
+.movie-card .movie-info h3 {
+  font-family: 'title', sans-serif;
+  font-size: 1.3rem;
+  color: var(--font-color-title);
+  margin: 0 0 8px 0;
+}
+
+.movie-card .movie-info h3 .year {
+  font-family: 'text', sans-serif;
+  font-size: 0.95rem;
+  color: var(--font-color-text);
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.movie-card .movie-info .movie-rating {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--color-main);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.movie-card .movie-info .description {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--font-color-text);
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+.movie-card .meta-data {
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+}
+
+.movie-card .meta-data p {
+  margin: 4px 0;
+  color: var(--font-color-text);
+}
+
+.movie-card .meta-data p strong {
+  color: var(--font-color-title);
+  font-weight: 600;
+}
+
+.movie-card .genres-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.movie-card .genres-tags .genre-tag {
+  background-color: var(--color-main-dark);
+  color: var(--color-second);
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(86, 182, 198, 0.15);
+}
+
+.movie-card .section-block {
+  margin-bottom: 14px;
+}
+
+.movie-card .section-block h4 {
+  margin: 0 0 4px 0;
+  color: var(--font-color-title);
+  font-size: 0.9rem;
+}
+
+.movie-card .section-block .actors-list {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--font-color-text);
+  opacity: 0.9;
+}
+
+.movie-card .reviews-section {
+  background-color: var(--color-main-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.movie-card .reviews-section .reviews-toggle-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: var(--font-color-title);
+  transition: background-color 0.2s ease;
+}
+
+.movie-card .reviews-section .reviews-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.movie-card .reviews-section .reviews-toggle-btn h4 {
+  margin: 0;
+  font-family: 'title', sans-serif;
+  font-size: 0.85rem;
+}
+
+.movie-card .reviews-section .reviews-toggle-btn .arrow {
+  font-size: 0.7rem;
+  color: var(--color-second);
+  transition: transform 0.3s ease;
+}
+
+.movie-card .reviews-section .reviews-toggle-btn .arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.movie-card .reviews-section .reviews-content {
+  padding: 0 12px 12px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  animation: fadeIn 0.25s ease-out;
+}
+
+.movie-card .reviews-section .review-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 0;
+}
+
+.movie-card .reviews-section .review-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.movie-card .reviews-section .review-item .review-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+}
+
+.movie-card .reviews-section .review-item .review-header .review-user {
+  font-weight: 600;
+  color: var(--color-second);
+}
+
+.movie-card .reviews-section .review-item .review-header .review-date {
+  color: var(--font-color-text);
+  opacity: 0.5;
+}
+
+.movie-card .reviews-section .review-item .review-text {
+  margin: 0;
+  font-style: italic;
+  color: var(--font-color-text);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.movie-card .reviews-section .no-reviews {
+  margin: 6px 0 0 0;
+  font-size: 0.8rem;
+  color: var(--font-color-text);
+  opacity: 0.5;
+}
+
+.movie-card .favorite-btn {
+  width: 100%;
+  background-color: var(--color-main);
+  border: 1px solid var(--color-main);
+  color: var(--font-color-title);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+
+.movie-card .favorite-btn:hover:not(:disabled) {
+  background-color: var(--color-second);
+  border-color: var(--color-second);
+}
+
+.movie-card .favorite-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: transparent;
+  color: var(--font-color-text);
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 30px;
+  align-items: start;
+  justify-content: center;
+  width: 100%;
+}
+
+.empty-list {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--font-color-text);
+  opacity: 0.7;
+  padding: 60px 40px;
+  min-height: 250px;
+  background: var(--color-second-dark);
+  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  font-size: 1.1rem;
+  font-weight: 500;
+  max-width: 600px;
+  margin: 40px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
