@@ -73,3 +73,14 @@ def test_delete_favorite_with_wrong_JWT():
 
     # Assert
     assert response.status_code == 401
+
+def test_get_favorites():
+    # Arrange
+    url = f"{BASE_URL}/favorites/user"
+    headers = {"Authorization": f"Bearer {JWT}"}
+
+    # Act
+    response = httpx.get(url, headers=headers)
+
+    # Assert
+    assert response.status_code == 200
