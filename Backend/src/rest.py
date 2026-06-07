@@ -148,7 +148,7 @@ async def register(user_data: structure.UserResponeSchema, db: Session = Depends
     db.commit()
     db.refresh(create_account)
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
     access_token = create_JWT(data={"sub": email}, expires_delta=access_token_expires)
 
     return {"access_token": access_token, "token_type": "bearer"}
@@ -160,7 +160,7 @@ async def login(data: structure.LoginSchema, db: Session = Depends(get_db)):
     if not verify_password(data.password, user.password):
         raise HTTPException(status_code=401, detail="Niepoprawny e-mail lub hasło", headers={"WWW-Authenticate": "Bearer"})
     
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
     access_token = create_JWT(data={"sub": user.email}, expires_delta=access_token_expires)
 
     return {"access_token": access_token, "token_type": "bearer"}

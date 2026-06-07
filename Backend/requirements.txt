@@ -1,6 +1,7 @@
 httpx
 fastapi
 passlib[bcrypt]
+bcrypt==4.0.1
 sqlalchemy
 python-dotenv
 pydantic

@@ -8,7 +8,7 @@ import { TokenResponse } from '../models/data.models';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000';
+  private apiUrl = 'api';
   private urlLogin = '/login'
   private urlRegister = '/register'
   private urlUser = '/user/me'
