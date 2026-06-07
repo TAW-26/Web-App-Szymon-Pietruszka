@@ -12,6 +12,6 @@ RUN npm run build --configuration=production
 
 FROM nginx:alpine
 
-COPY --from=build /app/dist/Frontend /usr/share/nginx/html
+COPY --from=build /app/dist/Frontend/browser /usr/share/nginx/html
 
 EXPOSE 80
