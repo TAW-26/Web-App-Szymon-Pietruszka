@@ -32,9 +32,12 @@ services:
       - PYTHONPATH=.
 
   frontend:
-    build: ./Frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
     ports:
       - "80:80"
+    restart: always
     depends_on:
       - backend
 
