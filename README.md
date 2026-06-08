@@ -10,9 +10,7 @@
 ![pgAdmin](https://img.shields.io/badge/pgAdmin-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 
 
-Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie wykorzystywać algorytm, który na podstawie preferencji użytkownika będzie proponował filmy dopasowane do jego gustu. System będzie analizował wcześniejsze polubienia użytkownika, aby lepiej dopasować kolejne rekomendacje.
-
-Aplikacja będzie również umożliwiała przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Zebrane dane o ocenach i polubieniach będą wykorzystywane przez algorytm do rekomendacji filmów.
+Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie umożliwiała przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Można wystwaić i przeglądać recenzje oraz oddawać ocene na wybrany film.
 
 ## Instalacja
 
@@ -28,10 +26,6 @@ Aby uruchomić aplikacje należy użyć w folderze `Frontend` komende:
 
 ```bash
 ng serve
-```
-albo:
-```bash
-npx ng serve
 ```
 
 Następnie można przejść do: http://localhost:4200
@@ -67,4 +61,8 @@ Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych.
 
 
 ## Dokumentacja
-Po więcej szczegółowych informacji dotyczącej aplikacji można przeczytać w [dokumentacji projektu](./Doc/TOPIC.md).
+Szczegółowe informacje dotyczące aplikacji:
+- [temat aplikacji webowej](./Doc/TOPIC.md)
+- [dokumentacji projektu](./Doc/TOPIC.md)
+- [opis API](./Doc/API.md)
+- [opis UI](./Doc/UI.md)
