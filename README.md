@@ -48,7 +48,6 @@ Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych.
 
 ![DPU](./Doc/img//DPU.png)
 
-
 ## Dokumentacja
 Szczegółowe informacje dotyczące aplikacji:
 - [temat aplikacji webowej](./Doc/TOPIC.md)
