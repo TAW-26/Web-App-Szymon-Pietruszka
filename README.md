@@ -8,51 +8,30 @@
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![pgAdmin](https://img.shields.io/badge/pgAdmin-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+
+Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie umożliwiała przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Można wystwaić i przeglądać recenzje oraz oddawać ocene na wybrany film.
+
+Projekt został w pełni **skonteneryzowany za pomocą Dockera**. Cały kod, biblioteki oraz konfiguracja środowiska zostały zamknięte wewnątrz niezależnego kontenera.
+
+Izolacja środowiska gwarantuje stabilność, bezpieczeństwo i błyskawiczne uruchomienie bez konieczności ręcznej instalacji baz danych czy dodatkowych pakietów.
 
 
-Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie wykorzystywać algorytm, który na podstawie preferencji użytkownika będzie proponował filmy dopasowane do jego gustu. System będzie analizował wcześniejsze polubienia użytkownika, aby lepiej dopasować kolejne rekomendacje.
+## Instrukcja uruchomienia
 
-Aplikacja będzie również umożliwiała przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Zebrane dane o ocenach i polubieniach będą wykorzystywane przez algorytm do rekomendacji filmów.
-
-## Instalacja
-
-Przed uruchomieniem aplikacji trzeba zainstalować wymagane zależności projektu:
-
-```bash
-npm install
-```
-
-## Uruchomienie projektu
-
-Aby uruchomić aplikacje należy użyć w folderze `Frontend` komende:
+Aby uruchomić aplikację na swoim komputerze, upewnij się, że masz zainstalowany program [**Docker Desktop**](https://docs.docker.com/desktop/). Jeżeli pracujesz na windows to pobierz jeszcze `WSL` za pomocą komendy:
 
 ```bash
-ng serve
-```
-albo:
-```bash
-npx ng serve
+wsl --install
 ```
 
-Następnie można przejść do: http://localhost:4200
-
-## Serwer
-
-Lokalny serwer backendowy stworzony w frameworku **FastAPI**. Serwer odpowiada za komunikację z zewnętrzną bazą danych oraz udostępnianie punktów końcowych dla aplikacji. Aby uruchomić serwer trzeba wejść w folder `Backend` i wpisać komende:
+Po pobraniu projektu wpisz do terminala w głównym folderze projektu w głównym folderze projektu (tam, gdzie znajduje się plik `Dockerfile` lub `docker-compose.yml`)
 
 ```bash
-uvicorn main:app --reload
+docker compose up --build
 ```
 
-Serwer jest dostępny pod adresem: http://localhost:8000
-
-## Testy
-
-Do przeglądania testów trzeba wpisać dane (nickname, password) a następnie przejśc do `test` i uruchomić:
-
-```bash
-pytest test_api.py -v
-```
+Po zakończeniu procesu aplikacja będzie dostępna w przeglądarce internetowe na `http://localhost`
 
 ## Diagram ERD
 Przedstawia strukturę bazy danych aplikacji. System przechowuje informacje o filmach, użytkownikach, aktorach, gatunkach, ocenach, recenzjach, polubionych filmach oraz relacjach między nimi.
@@ -67,4 +46,9 @@ Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych.
 
 
 ## Dokumentacja
-Po więcej szczegółowych informacji dotyczącej aplikacji można przeczytać w [dokumentacji projektu](./Doc/TOPIC.md).
+Szczegółowe informacje dotyczące aplikacji:
+- [temat aplikacji webowej](./Doc/TOPIC.md)
+- [dokumentacji projektu](./Doc/TOPIC.md)
+- [monitorowanie aplikacji](./Doc/MONITORING.md)
+- [opis API](./Doc/API.md)
+- [opis UI](./Doc/UI.md)
