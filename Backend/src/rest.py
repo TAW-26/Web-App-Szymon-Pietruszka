@@ -103,6 +103,12 @@ def check_age(birthdate: str) -> bool:
 def read_root():
     return {"title": "MovieCheck", "description": "Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja umożliwia przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Można również oddać ocene oreaz recnezje do wybranego filmu"}
 
+# SENTRY SIMPLE TEST
+
+@router.get("/test-sentry")
+def trigger_error():
+    division_by_zero = 1 / 0
+    return {"message": "You can't do that!"}
 
 # USER
 
