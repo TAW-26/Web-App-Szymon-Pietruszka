@@ -10,7 +10,7 @@
 ![pgAdmin](https://img.shields.io/badge/pgAdmin-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie umożliwiała przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Można wystwaić i przeglądać recenzje oraz oddawać ocene na wybrany film.
+Projekt ma na celu pomóc użytkownikowi w wyborze filmu do obejrzenia. Aplikacja będzie umożliwiała przeglądanie listy filmów, wyszukiwanie ich oraz zapisywanie wybranych tytułów do listy ulubionych. Można wystawiać i przeglądać recenzje oraz oddawać ocene (od 1 do 10) na wybrany film, ale tylko raz bez edycji późniejszej.
 
 Projekt został w pełni **skonteneryzowany za pomocą Dockera**. Cały kod, biblioteki oraz konfiguracja środowiska zostały zamknięte wewnątrz niezależnego kontenera.
 
@@ -46,7 +46,7 @@ Przedstawia strukturę bazy danych aplikacji. System przechowuje informacje o fi
 
 Przedstawia funkcje dostępne dla użytkowników zalogowanych i niezalogowanych. Użytkownik niezalogowany może się rejestrować i przeglądać filmy, natomiast zalogowany korzysta z pełnych funkcji systemu, takich jak ocenianie, recenzowanie, polubienie filmu oraz przeglądanie proponowanych dla użytkownika filmów. Backend odpowiada za wykonywanie algorytmów oraz automatyczne aktualizowanie ocen filmów.
 
-![Diagram Przypadków Użycia](./Doc/img//DPU.png)
+![DPU](./Doc/img//DPU.png)
 
 
 ## Dokumentacja
