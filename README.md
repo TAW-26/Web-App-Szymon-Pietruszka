@@ -16,6 +16,10 @@ Projekt został w pełni **skonteneryzowany za pomocą Dockera**. Cały kod, bib
 
 Izolacja środowiska gwarantuje stabilność, bezpieczeństwo i błyskawiczne uruchomienie bez konieczności ręcznej instalacji baz danych czy dodatkowych pakietów.
 
+## **Aplikacja webowa bez Dockera**
+
+Instalacja oraz kod źródłowy aplikacji webowej w wersji bez wsparcia dla środowiska Docker zostały wydzielone na osobną gałąź [**web-app**](https://github.com/TAW-26/Web-App-Szymon-Pietruszka/tree/web-app)
+
 
 ## Instrukcja uruchomienia
 
