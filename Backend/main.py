@@ -1,6 +1,16 @@
+import sentry_sdk
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware 
 from src.rest import router
+from dotenv import load_dotenv
+
+load_dotenv()
+
+sentry_sdk.init(
+    dsn=os.getenv('DSN_KEY'),
+    send_default_pii=True,
+)
 
 app = FastAPI()
 
