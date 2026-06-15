@@ -50,4 +50,10 @@ Do weryfikacji stabilności środowiska kontenerowego w warunkach wzmożonego ru
 
 Narzędzie te symuluje ruch n użytkowników generujących zapytania w ustawionych interwałach do endpointów `backendu` oraz `frontendu`
 
+Aby uruchomić locust trzeba wejść w `Backend` a następnie wpisać:
+
+```bash
+locust -f locustfile.py
+```
+
 ![Locuts](./img/locust.png)
